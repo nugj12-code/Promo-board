@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light" />
+<meta name="theme-color" content="#ffffff" />
+<title>화이트 보드 홍보판</title>
+<meta name="description" content="부스트가 많을수록 더 크게 보이는, 순백의 공유 홍보판." />
+<link rel="canonical" href="https://nugj12-code.github.io/Promo-board/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="화이트 보드 홍보판" />
+<meta property="og:title" content="화이트 보드 홍보판" />
+<meta property="og:description" content="부스트가 많을수록 더 크게 보이는, 순백의 공유 홍보판. 이미지를 올리고 부스트로 키워 보세요." />
+<meta property="og:url" content="https://nugj12-code.github.io/Promo-board/" />
+<meta property="og:image" content="https://nugj12-code.github.io/Promo-board/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="순백의 보드 위에 크기가 다른 홍보 카드들이 놓여 있는 화면" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="화이트 보드 홍보판" />
+<meta name="twitter:description" content="부스트가 많을수록 더 크게 보이는, 순백의 공유 홍보판." />
+<meta name="twitter:image" content="https://nugj12-code.github.io/Promo-board/og.png" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0c'/%3E%3Crect x='17' y='7' width='8' height='8' rx='2' fill='%23fff'/%3E%3C/svg%3E" />
+<style>
+/* ============================================================
+   화이트 보드 홍보판 — 순백(#FFFFFF) 모노크롬 보드
+   ============================================================ */
+:root{
+  --bg:#ffffff;
+  --ink:#0b0b0c;
+  --ink-soft:#3a3a3d;
+  --muted:#8e8e93;
+  --line:#ebebee;
+  --line-strong:#dcdce0;
+  --soft:#f7f7f8;
+  --radius:18px;
+  --shadow-1:0 1px 2px rgba(10,10,12,.05), 0 10px 30px -22px rgba(10,10,12,.45);
+  --shadow-2:0 2px 6px rgba(10,10,12,.07), 0 22px 50px -26px rgba(10,10,12,.55);
+  --font:"Pretendard","Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR",-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --ease:cubic-bezier(.22,.72,.2,1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{background:var(--bg)}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;color:var(--ink);font-family:var(--font);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  letter-spacing:-.01em;
+}
+body.lock{overflow:hidden}
+img{max-width:100%}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+/* ---------- 레이아웃 ---------- */
+.app{max-width:1560px;margin:0 auto;padding:0 clamp(14px,3vw,40px) 132px}
+
+/* ---------- 헤더 ---------- */
+.top{
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:12px 20px;
+  padding:16px 0 13px;background:rgba(255,255,255,.88);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .25s var(--ease);
+  flex-wrap:wrap;
+}
+.top.scrolled{border-bottom-color:var(--line)}
+.brand-wrap{display:flex;flex-direction:column;gap:3px;min-width:0}
+.brand{display:flex;align-items:center;gap:9px}
+.brand .mark{position:relative;width:19px;height:19px;border-radius:6px;background:var(--ink);flex:none}
+.brand .mark::after{content:"";position:absolute;top:4.5px;right:4.5px;width:8px;height:8px;border-radius:2.5px;background:#fff}
+h1{
+  margin:0;font-size:17px;font-weight:800;letter-spacing:-.035em;line-height:1.1;
+  display:flex;align-items:baseline;gap:6px;white-space:nowrap;
+}
+h1 .thin{font-weight:500;color:var(--muted);letter-spacing:-.02em}
+.tagline{margin:0;font-size:11.5px;color:var(--muted);letter-spacing:-.015em;padding-left:28px}
+.top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.mode-badge{
+  display:inline-flex;align-items:center;gap:6px;font-size:10.5px;line-height:1.2;
+  color:#6f6f75;background:var(--soft);border:1px solid var(--line);
+  padding:6px 10px;border-radius:999px;letter-spacing:-.01em;white-space:nowrap;
+}
+.mode-badge .dot{width:6px;height:6px;border-radius:50%;border:1.5px solid #9a9aa1;flex:none}
+.mode-badge[data-mode="cloud"]{color:var(--ink);background:#fff;border-color:var(--line-strong)}
+.mode-badge[data-mode="cloud"] .dot{background:var(--ink);border-color:var(--ink)}
+.mode-badge[hidden]{display:none}
+.count{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:0;white-space:nowrap}
+
+/* DB 초기화 대기 안내 */
+.setupbar{
+  display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-top:14px;
+  padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--soft);
+  font-size:12px;line-height:1.55;color:var(--ink-soft);
+}
+.setupbar[hidden]{display:none}
+.setupbar .sb-title{font-weight:800;color:var(--ink);letter-spacing:-.03em}
+.setupbar code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:1px 5px}
+.setupbar .sb-btn{
+  margin-left:auto;appearance:none;border:1px solid var(--line-strong);background:#fff;color:var(--ink);
+  font-size:11.5px;font-weight:750;padding:8px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  transition:.18s var(--ease);
+}
+.setupbar .sb-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ---------- 보드 ---------- */
+.board{position:relative;margin-top:16px;width:100%;min-height:120px}
+.board.is-empty{min-height:min(58vh,480px)}
+.tile{
+  position:absolute;top:0;left:0;padding:0;margin:0;display:block;
+  border:1px solid var(--line);border-radius:var(--radius);background:#fafafa;
+  box-shadow:var(--shadow-1);overflow:hidden;cursor:pointer;text-align:left;
+  container-type:inline-size;
+  transition:width .55s var(--ease),height .55s var(--ease),transform .55s var(--ease),box-shadow .25s var(--ease),border-color .25s;
+  will-change:width,height,transform;
+}
+.tile.no-anim{transition:none}
+.tile:hover{box-shadow:var(--shadow-2);border-color:var(--line-strong)}
+.tile:active{transform-origin:center}
+.tile img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#f1f1f3}
+.tile .cap{
+  position:absolute;left:0;right:0;bottom:0;pointer-events:none;
+  padding:clamp(6px,3.2cqw,13px) clamp(7px,3.8cqw,15px) clamp(7px,3.6cqw,14px);
+  background:rgba(255,255,255,.96);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border-top:1px solid rgba(10,10,12,.045);
+}
+.tile .cap-title{
+  display:block;font-size:clamp(10px,5.4cqw,15px);font-weight:750;letter-spacing:-.03em;color:var(--ink);
+  line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.tile .cap-sub{
+  display:block;margin-top:2px;font-size:clamp(8.5px,4cqw,12px);font-weight:500;color:#6f6f75;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  opacity:0;transform:translateY(3px);transition:opacity .3s var(--ease),transform .3s var(--ease);
+}
+.tile[data-span="1"] .cap-sub{display:none}
+.tile:hover .cap-sub,.tile:focus-visible .cap-sub{opacity:1;transform:none}
+.tile .chip{
+  position:absolute;top:clamp(6px,3cqw,12px);right:clamp(6px,3cqw,12px);
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:clamp(9px,3.9cqw,12px);font-weight:750;font-variant-numeric:tabular-nums;
+  color:var(--ink);background:rgba(255,255,255,.92);border:1px solid rgba(10,10,12,.08);
+  padding:2px 7px;border-radius:999px;line-height:1.35;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+}
+.tile .chip .fire{font-size:.95em;filter:saturate(.15)}
+.tile .crown{
+  position:absolute;top:clamp(6px,3cqw,12px);left:clamp(6px,3cqw,12px);
+  font-size:clamp(8.5px,3.5cqw,11px);font-weight:800;letter-spacing:0;
+  background:var(--ink);color:#fff;padding:2px 7px;border-radius:999px;line-height:1.4;
+}
+.tile.bump img{animation:bumpimg .6s var(--ease)}
+@keyframes bumpimg{0%{transform:scale(1)}35%{transform:scale(1.035)}100%{transform:scale(1)}}
+.plusone{
+  position:absolute;right:12px;bottom:12px;pointer-events:none;
+  font-size:13px;font-weight:800;color:var(--ink);
+  background:rgba(255,255,255,.95);border:1px solid rgba(10,10,12,.08);
+  padding:3px 9px;border-radius:999px;opacity:0;
+  animation:plusone 1s var(--ease);
+}
+@keyframes plusone{0%{opacity:0;transform:translateY(6px) scale(.9)}25%{opacity:1}100%{opacity:0;transform:translateY(-22px) scale(.98)}}
+
+/* 빈 보드 */
+.empty{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;color:var(--muted);font-size:13.5px;pointer-events:none;
+}
+.empty[hidden]{display:none}
+.empty .big{font-size:15px;font-weight:750;color:var(--ink);letter-spacing:-.03em}
+
+/* ---------- 플로팅 버튼 ---------- */
+.fab{
+  position:fixed;right:clamp(16px,3vw,32px);bottom:calc(18px + env(safe-area-inset-bottom));
+  z-index:40;display:inline-flex;align-items:center;gap:7px;
+  height:52px;padding:0 21px 0 17px;border:0;border-radius:999px;
+  background:var(--ink);color:#fff;font-size:14.5px;font-weight:750;letter-spacing:-.02em;
+  box-shadow:0 6px 18px -6px rgba(10,10,12,.45),0 18px 40px -24px rgba(10,10,12,.6);
+  cursor:pointer;transition:transform .2s var(--ease),box-shadow .2s var(--ease);
+}
+.fab:hover{transform:translateY(-1px);box-shadow:0 8px 22px -6px rgba(10,10,12,.5),0 24px 50px -26px rgba(10,10,12,.65)}
+.fab:active{transform:translateY(0) scale(.985)}
+.fab .plus{font-size:19px;font-weight:600;line-height:1;margin-top:-1px}
+
+/* ---------- 모달 공통 ---------- */
+.modal{
+  position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+  padding:clamp(10px,3vw,32px);background:rgba(12,12,14,.34);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.modal.open{display:flex;animation:fade .22s var(--ease)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{
+  position:relative;width:min(540px,100%);max-height:min(92vh,880px);overflow:auto;
+  background:#fff;border-radius:26px;box-shadow:0 30px 90px -30px rgba(0,0,0,.55);
+  animation:pop .3s var(--ease);-webkit-overflow-scrolling:touch;
+}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+.sheet .x{
+  position:absolute;top:12px;right:12px;z-index:2;
+  width:34px;height:34px;border-radius:50%;border:1px solid rgba(10,10,12,.08);
+  background:rgba(255,255,255,.9);color:var(--ink);font-size:14px;line-height:1;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.sheet .x:hover{background:#fff;border-color:var(--line-strong)}
+.sheet-head{padding:22px 22px 0}
+.sheet-head h2{margin:0 0 4px;font-size:18px;font-weight:800;letter-spacing:-.035em}
+.sheet-head p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.5}
+.sheet-body{padding:16px 22px 22px}
+
+/* 상세 모달 */
+.dmedia{background:#f6f6f7;display:flex;align-items:center;justify-content:center;min-height:120px}
+.dmedia img{width:100%;max-height:min(46vh,420px);object-fit:contain;display:block}
+.dbody{padding:18px 22px 24px}
+.dmeta{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);letter-spacing:0;font-variant-numeric:tabular-nums}
+.dmeta .pill{background:var(--soft);border:1px solid var(--line);color:var(--ink);font-weight:700;padding:3px 8px;border-radius:999px;font-size:11px}
+.dbody h2{margin:9px 0 0;font-size:22px;font-weight:800;letter-spacing:-.04em;line-height:1.25}
+.ddesc{margin:8px 0 0;font-size:13.5px;line-height:1.62;color:var(--ink-soft);letter-spacing:-.012em;white-space:pre-wrap;word-break:break-word}
+.desc-empty{color:var(--muted)}
+.dlink{
+  display:inline-flex;align-items:center;gap:5px;margin-top:13px;
+  font-size:12.5px;font-weight:700;color:var(--ink);text-decoration:none;
+  border-bottom:1px solid var(--line-strong);padding-bottom:2px;max-width:100%;
+}
+.dlink:hover{border-bottom-color:var(--ink)}
+.dlink[hidden]{display:none}
+.tiers{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 12px}
+.tier{
+  font-size:11px;font-weight:650;padding:7px 10px;border-radius:999px;
+  border:1px solid var(--line);background:#fafafa;color:var(--muted);white-space:nowrap;
+  font-variant-numeric:tabular-nums;transition:.2s var(--ease);
+}
+.tier[data-active="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn{
+  appearance:none;border:0;width:100%;padding:16px;border-radius:16px;cursor:pointer;
+  font-size:15px;font-weight:750;letter-spacing:-.025em;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  background:var(--ink);color:#fff;transition:transform .16s var(--ease),opacity .2s,background .2s;
+}
+.btn:hover{opacity:.9}
+.btn:active{transform:scale(.988)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line-strong)}
+.btn.ghost:hover{background:var(--soft);opacity:1}
+.btn.small{padding:12px;font-size:13.5px;border-radius:13px}
+.fine{margin:10px 0 0;font-size:11px;color:var(--muted);text-align:center;line-height:1.5}
+.goal{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--muted);margin:0 0 6px;font-variant-numeric:tabular-nums}
+.goal .now{color:var(--ink);font-weight:750}
+
+/* 광고/결제 모달 */
+.adbox{
+  position:relative;margin:0 0 14px;border-radius:16px;overflow:hidden;
+  border:1px solid var(--line);background:
+    repeating-linear-gradient(135deg,#fafafa 0 10px,#f4f4f5 10px 20px);
+  aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  color:var(--muted);font-size:11.5px;text-align:center;padding:12px;
+}
+.adbox .adlabel{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#b4b4ba}
+.adbox .big{font-size:14px;font-weight:750;color:var(--ink);letter-spacing:-.03em}
+.adprogress{height:5px;border-radius:999px;background:var(--line);overflow:hidden;margin:0 0 8px}
+.adprogress i{display:block;height:100%;width:0;background:var(--ink);border-radius:999px;transition:width .25s linear}
+.adtimer{text-align:center;font-size:12px;color:var(--muted);margin:0 0 14px;font-variant-numeric:tabular-nums}
+.adtimer b{color:var(--ink);font-weight:800}
+.priceline{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:15px 16px;border:1px solid var(--line);border-radius:16px;background:var(--soft);margin:0 0 12px;
+}
+.priceline .lb{font-size:12px;color:var(--muted)}
+.priceline .amt{font-size:22px;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.testbadge{
+  display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#6f6f75;
+  background:#fff;border:1px solid var(--line-strong);border-radius:999px;padding:4px 9px;margin:0 0 12px;
+}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.kv:last-of-type{border-bottom:0}
+.kv .k{color:var(--muted)}
+.kv .v{font-weight:700;max-width:60%;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 업로드 모달 */
+.drop{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  border:1.5px dashed var(--line-strong);border-radius:16px;background:#fcfcfc;
+  padding:24px 16px;cursor:pointer;color:var(--muted);font-size:12.5px;text-align:center;
+  transition:.2s var(--ease);overflow:hidden;position:relative;margin-bottom:14px;
+}
+.drop:hover{border-color:#c3c3c9;background:#fafafa}
+.drop.drag{border-color:var(--ink);background:#f4f4f5}
+.drop .big{font-size:13.5px;font-weight:750;color:var(--ink);letter-spacing:-.03em}
+.drop .hint{font-size:11px}
+.drop.has{padding:0;border-style:solid;border-color:var(--line);background:#f6f6f7}
+.drop img{display:block;width:100%;max-height:220px;object-fit:contain}
+.drop .swap{
+  position:absolute;right:8px;bottom:8px;font-size:10.5px;font-weight:700;color:var(--ink);
+  background:rgba(255,255,255,.94);border:1px solid rgba(10,10,12,.08);border-radius:999px;padding:4px 9px;
+}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}
+.field .lb{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:650;color:var(--ink-soft)}
+.field .lb .opt{font-weight:500;color:var(--muted);font-size:11px}
+.field input,.field textarea{
+  font:inherit;font-size:14px;padding:12px 13px;border:1px solid var(--line-strong);border-radius:12px;
+  background:#fff;color:var(--ink);outline:none;transition:.18s var(--ease);width:100%;letter-spacing:-.01em;
+}
+.field textarea{resize:vertical;min-height:74px;line-height:1.55}
+.field input:focus,.field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,12,.07)}
+.field input::placeholder,.field textarea::placeholder{color:#b6b6bc}
+.err{margin:0 0 12px;font-size:12px;font-weight:650;color:#0b0b0c;background:#f4f4f5;border-radius:10px;padding:10px 12px;border:1px solid var(--line)}
+.err[hidden]{display:none}
+.seg2{display:flex;gap:6px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:14px}
+.seg2 button{
+  flex:1;appearance:none;border:0;background:transparent;color:var(--muted);font-size:12.5px;font-weight:700;
+  padding:9px;border-radius:9px;cursor:pointer;transition:.18s var(--ease);letter-spacing:-.02em;
+}
+.seg2 button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(10,10,12,.08)}
+.counter{font-size:10.5px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+
+/* 토스트 */
+.toast{
+  position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));z-index:200;
+  transform:translate(-50%,16px);opacity:0;pointer-events:none;
+  background:var(--ink);color:#fff;font-size:13px;font-weight:650;letter-spacing:-.02em;
+  padding:11px 17px;border-radius:999px;box-shadow:0 16px 40px -18px rgba(0,0,0,.6);
+  transition:opacity .28s var(--ease),transform .28s var(--ease);max-width:calc(100vw - 40px);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* 스켈레톤/로딩 */
+.boot{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:150;transition:opacity .3s}
+.boot span{width:34px;height:34px;border-radius:9px;background:var(--ink);animation:breathe 1.2s infinite var(--ease)}
+@keyframes breathe{0%,100%{opacity:.14;transform:scale(.9)}50%{opacity:1;transform:scale(1)}}
+.boot.gone{opacity:0;pointer-events:none}
+
+@media (max-width:640px){
+  .modal{align-items:flex-end;padding:0}
+  .sheet{width:100%;max-height:93vh;border-radius:24px 24px 0 0;animation:rise .32s var(--ease)}
+  @keyframes rise{from{transform:translateY(100%)}to{transform:none}}
+  .dmedia img{max-height:40vh}
+  .dbody{padding:16px 18px calc(20px + env(safe-area-inset-bottom))}
+  .dbody h2{font-size:20px}
+  .sheet-head{padding:20px 18px 0}
+  .sheet-body{padding:14px 18px calc(20px + env(safe-area-inset-bottom))}
+  .top{align-items:flex-start}
+  .top-right{width:100%;justify-content:flex-start}
+  .mode-badge{font-size:10px;padding:5px 9px}
+  .tagline{padding-left:0;font-size:11px}
+  h1{font-size:16.5px}
+  .app{padding-bottom:120px}
+  .toast{bottom:auto;top:calc(10px + env(safe-area-inset-top));transform:translate(-50%,-14px)}
+  .toast.show{transform:translate(-50%,0)}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="top" id="top">
+    <div class="brand-wrap">
+      <div class="brand">
+        <span class="mark" aria-hidden="true"></span>
+        <h1>화이트 보드 <span class="thin">홍보판</span></h1>
+      </div>
+      <p class="tagline">부스트가 많을수록 더 크게 보여요</p>
+    </div>
+    <div class="top-right">
+      <span class="mode-badge" id="modeBadge" hidden><i class="dot"></i><span id="modeText"></span></span>
+      <span class="count" id="boardCount">0개</span>
+    </div>
+  </header>
+
+  <div class="setupbar" id="setupBar" hidden>
+    <span><b class="sb-title">DB 초기화 대기 중</b> — Supabase SQL Editor에서 <code>supabase_schema.sql</code>을 한 번 실행하면 실시간 공유가 켜져요. 그동안은 예시 카드로 미리 둘러볼 수 있어요.</span>
+    <button class="sb-btn" id="setupRetry" type="button">다시 확인</button>
+  </div>
+
+  <main class="board" id="board" aria-label="홍보 이미지 보드">
+    <div class="empty" id="empty" hidden>
+      <span class="big">아직 아무것도 없어요</span>
+      <span>첫 번째 홍보를 올려 보세요</span>
+    </div>
+  </main>
+</div>
+
+<button class="fab" id="fab" type="button"><span class="plus" aria-hidden="true">+</span>올리기</button>
+
+<!-- ============ 상세 모달 ============ -->
+<div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="dTitle" aria-hidden="true">
+  <div class="sheet" role="document">
+    <button class="x" type="button" data-close aria-label="닫기">✕</button>
+    <div class="dmedia"><img id="dImg" alt="" /></div>
+    <div class="dbody">
+      <div class="dmeta">
+        <span class="pill" id="dRank">1위</span>
+        <span id="dTotal">전체 0개</span>
+        <span aria-hidden="true">·</span>
+        <span id="dBoost">부스트 0</span>
+      </div>
+      <h2 id="dTitle">제목</h2>
+      <p class="ddesc" id="dDesc"></p>
+      <a class="dlink" id="dLink" href="#" target="_blank" rel="noopener noreferrer">링크 열기 ↗</a>
+
+      <div class="tiers" id="dTiers">
+        <span class="tier" data-tier="free">남은 무료 부스트 10/10</span>
+        <span class="tier" data-tier="ad">광고 보고 키우기 10/10</span>
+        <span class="tier" data-tier="paid">₩500/회</span>
+      </div>
+
+      <button class="btn" id="dBoostBtn" type="button">
+        <span aria-hidden="true">🔥</span><span id="dBoostLabel">무료로 키우기</span>
+      </button>
+      <p class="fine" id="dFine">부스트 1회마다 보드에서 한 단계 커져요</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 광고 모달 (2단계) ============ -->
+<div class="modal" id="adModal" role="dialog" aria-modal="true" aria-labelledby="adTitle" aria-hidden="true">
+  <div class="sheet" role="document">
+    <button class="x" type="button" data-close aria-label="닫기">✕</button>
+    <div class="sheet-head">
+      <h2 id="adTitle">광고 보고 키우기</h2>
+      <p>짧은 광고를 끝까지 보면 부스트 1회를 드려요.</p>
+    </div>
+    <div class="sheet-body">
+      <!-- TODO: AdSense / Rewarded Ad SDK hook — 실제 광고 슬롯을 이 박스에 마운트하고,
+           광고 로드 실패·스킵 시 아래 finishAd()를 호출하지 않도록 처리하세요. -->
+      <div class="adbox" id="adBox">
+        <span class="adlabel">advertisement</span>
+        <span class="big" id="adBig">광고 영역</span>
+        <span>AdSense · Rewarded Ad SDK 연결 지점</span>
+      </div>
+      <div class="adprogress"><i id="adBar"></i></div>
+      <p class="adtimer" id="adTimer"><b>5</b>초 후 부스트를 받을 수 있어요</p>
+      <button class="btn" id="adGet" type="button" disabled>부스트 받기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 결제 모달 (3단계) ============ -->
+<div class="modal" id="payModal" role="dialog" aria-modal="true" aria-labelledby="payTitle" aria-hidden="true">
+  <div class="sheet" role="document">
+    <button class="x" type="button" data-close aria-label="닫기">✕</button>
+    <div class="sheet-head">
+      <h2 id="payTitle">부스트 구매</h2>
+      <p>무료·광고 부스트를 모두 쓴 뒤에는 소액 결제로 키울 수 있어요.</p>
+    </div>
+    <div class="sheet-body">
+      <div class="priceline">
+        <span class="lb">부스트 1회</span>
+        <span class="amt">₩500</span>
+      </div>
+      <div class="kv"><span class="k">대상</span><span class="v" id="payItem">-</span></div>
+      <div class="kv"><span class="k">결제 수단</span><span class="v">카드 · 간편결제</span></div>
+      <div style="height:14px"></div>
+      <span class="testbadge" id="payTestBadge">● 테스트 모드 · 실제 결제가 발생하지 않습니다</span>
+      <!-- TODO: Toss Payments / Stripe / Ko-fi hook — PG 키를 CONFIG에 넣고
+           아래 버튼을 실제 결제창(결제 요청 → 승인 → 서버 검증)으로 교체하세요. -->
+      <button class="btn" id="payBtn" type="button">테스트 결제로 부스트</button>
+      <button class="btn ghost small" type="button" data-close style="margin-top:8px">다음에 할게요</button>
+      <p class="fine">실제 서비스에서는 결제 승인 후 서버(RPC)에서 부스트를 올리는 구조를 권장해요.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 업로드 모달 ============ -->
+<div class="modal" id="upModal" role="dialog" aria-modal="true" aria-labelledby="upHeading" aria-hidden="true">
+  <div class="sheet" role="document">
+    <button class="x" type="button" data-close aria-label="닫기">✕</button>
+    <div class="sheet-head">
+      <h2 id="upHeading">새 홍보 올리기</h2>
+      <p>이미지를 올리고 한 줄 소개를 붙이면 보드에 나타나요.</p>
+    </div>
+    <div class="sheet-body">
+      <div class="seg2" role="group" aria-label="이미지 방식">
+        <button type="button" id="segFile" aria-pressed="true">이미지 파일</button>
+        <button type="button" id="segUrl" aria-pressed="false">이미지 링크</button>
+      </div>
+
+      <label class="drop" id="drop" for="fileInput" tabindex="0">
+        <span class="big" id="dropBig">이미지를 끌어다 놓거나 눌러서 선택</span>
+        <span class="hint" id="dropHint">JPG · PNG · WebP · GIF · 12MB 이하</span>
+        <img id="dropPreview" alt="" hidden />
+        <span class="swap" id="dropSwap" hidden>바꾸기</span>
+      </label>
+      <input id="fileInput" type="file" accept="image/*" hidden />
+
+      <div class="field" id="urlField" hidden>
+        <span class="lb">이미지 URL</span>
+        <input id="upImageUrl" type="url" inputmode="url" placeholder="https://example.com/poster.jpg" autocomplete="off" />
+      </div>
+
+      <div class="field">
+        <span class="lb">제목 <span class="opt">필수 · 60자</span></span>
+        <input id="upTitle" type="text" maxlength="60" placeholder="예) 하루 만화방 · 신작 입고" autocomplete="off" />
+      </div>
+
+      <div class="field">
+        <span class="lb">짧은 소개 <span class="opt">선택 · 200자</span></span>
+        <textarea id="upDesc" maxlength="200" placeholder="한두 문장으로 소개해 주세요."></textarea>
+        <span class="counter"><span id="descCount">0</span>/200</span>
+      </div>
+
+      <div class="field">
+        <span class="lb">링크 <span class="opt">선택</span></span>
+        <input id="upLink" type="url" inputmode="url" placeholder="https://..." autocomplete="off" />
+      </div>
+
+      <p class="err" id="upErr" hidden></p>
+      <button class="btn" id="upSubmit" type="button">보드에 올리기</button>
+      <p class="fine" id="upFine">올린 홍보는 부스트 1회에서 시작해요</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="boot" id="boot"><span></span></div>
+
+<script>
+/* ==========================================================================
+   CONFIG — 여기 두 값만 바꾸면 실시간 공유 보드로 전환됩니다.
+   1) Supabase 프로젝트 → Settings → API 에서 URL / anon public key 복사
+   2) supabase_schema.sql 을 SQL Editor 에서 실행
+   값이 그대로(placeholder)면 자동으로 "로컬 체험 모드"(localStorage)로 동작합니다.
+   ========================================================================== */
+const CONFIG = {
+  SUPABASE_URL: 'https://xvsutfyxxtkcxxbixgan.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_4SmEUMZCoyx8T5BkyjMzow_yr4u_Mx4',
+  BUCKET: 'board-images',
+
+  // 부스트 정책
+  FREE_LIMIT: 10,      // 1~10회: 무료
+  AD_LIMIT: 10,        // 11~20회: 광고 시청 (최대 10회)
+  PRICE_KRW: 500,      // 21회~: 부스트당 결제
+  AD_SECONDS: 5,       // 리워드 광고 최소 시청 시간(초)
+
+  // 결제/광고 연동 지점 (비워두면 테스트 모드로 표시)
+  TOSS_CLIENT_KEY: '',        // TODO: Toss Payments / Stripe / Ko-fi hook
+  ADSENSE_CLIENT: '',         // TODO: AdSense / Rewarded Ad SDK hook
+  MAX_UPLOAD_SIDE: 1600,
+  LOCAL_UPLOAD_SIDE: 900
+};
+</script>
+
+<script>
+/* ==========================================================================
+   화이트 보드 홍보판 — 앱 로직
+   1) 저장소(로컬/클라우드) 2) 샘플 아트 3) 마소니 레이아웃 4) 부스트 3단계
+   5) 업로드 6) Supabase 실시간
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  /* ---------------- 0. 작은 도구들 ---------------- */
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.prototype.slice.call((root || document).querySelectorAll(sel));
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const uid = () => (window.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 9);
+  const num = (n) => (n || 0).toLocaleString('ko-KR');
+  const nowISO = () => new Date().toISOString();
+  const isPlaceholder = (v) => !v || /YOUR_|^$/.test(String(v).trim());
+  const safeUrl = (v) => {
+    if (!v) return '';
+    try {
+      const u = new URL(String(v).trim());
+      return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : '';
+    } catch (e) { return ''; }
+  };
+  function debounce(fn, ms) {
+    let t = 0;
+    return function () { clearTimeout(t); t = setTimeout(fn, ms); };
+  }
+  function toast(msg) {
+    const el = $('#toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+  }
+
+  /* ---------------- 1. 저장소 ---------------- */
+  const KEY_ITEMS = 'whiteboard.items.v1';
+  const KEY_MINE = 'whiteboard.mine.v1';
+
+  const store = {
+    get(k, fallback) {
+      try {
+        const raw = localStorage.getItem(k);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (e) { return fallback; }
+    },
+    set(k, v) {
+      try { localStorage.setItem(k, JSON.stringify(v)); return true; }
+      catch (e) { return false; }
+    },
+    clear() {
+      try { localStorage.removeItem(KEY_ITEMS); localStorage.removeItem(KEY_MINE); } catch (e) {}
+    }
+  };
+
+  /* ---------------- 2. 샘플 아트 (오프라인에서도 보이는 모노크롬 포스터) ---------------- */
+  function hashStr(s) {
+    let h = 2166136261 >>> 0;
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
+  function rng(seed) {
+    let a = hashStr(seed);
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const artCache = new Map();
+  function artSVG(seed) {
+    const R = rng(String(seed));
+    const W = 900, H = 720;
+    const style = Math.floor(R() * 6);
+    let body = '';
+    let bg = '#ffffff';
+
+    if (style === 0) { // 세로 스트라이프
+      let x = 0;
+      while (x < W) {
+        const w = 2 + R() * 24;
+        body += '<rect x="' + x.toFixed(1) + '" y="0" width="' + w.toFixed(1) + '" height="' + H +
+          '" fill="#0b0b0c" opacity="' + (0.05 + R() * 0.55).toFixed(2) + '"/>';
+        x += w + 5 + R() * 42;
+      }
+    } else if (style === 1) { // 동심원
+      const cx = W * (0.3 + R() * 0.4), cy = H * (0.3 + R() * 0.4);
+      for (let i = 1; i <= 13; i++) {
+        body += '<circle cx="' + cx.toFixed(0) + '" cy="' + cy.toFixed(0) + '" r="' + (i * H / 20).toFixed(0) +
+          '" fill="none" stroke="#0b0b0c" stroke-width="' + (0.7 + R() * 1.7).toFixed(2) +
+          '" opacity="' + Math.max(0.06, 0.8 - i * 0.055).toFixed(2) + '"/>';
+      }
+    } else if (style === 2) { // 하프톤 점
+      const step = 30 + R() * 20;
+      for (let y = step / 2; y < H; y += step) {
+        for (let x = step / 2; x < W; x += step) {
+          const d = Math.hypot((x - W * 0.5) / W, (y - H * 0.45) / H) * 1.9;
+          const r = Math.max(0, (1 - d) * step * 0.42);
+          if (r > 0.7) {
+            body += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="' + r.toFixed(1) +
+              '" fill="#0b0b0c" opacity="' + (0.16 + 0.52 * (1 - d)).toFixed(2) + '"/>';
+          }
+        }
+      }
+    } else if (style === 3) { // 도형 구성 (검정 배경 변형)
+      const dark = R() > 0.45;
+      if (dark) bg = '#0b0b0c';
+      const fg = dark ? '#ffffff' : '#0b0b0c';
+      body += '<rect x="' + (W * 0.08) + '" y="' + (H * 0.1) + '" width="' + (W * 0.4) + '" height="' + (W * 0.4) +
+        '" fill="' + fg + '" opacity="' + (dark ? 0.95 : 0.9) + '"/>';
+      body += '<circle cx="' + (W * 0.66) + '" cy="' + (H * 0.5) + '" r="' + (H * 0.27) + '" fill="' + fg + '" opacity="' +
+        (dark ? 0.18 : 0.13) + '"/>';
+      body += '<rect x="' + (W * 0.18) + '" y="' + (H * 0.66) + '" width="' + (W * 0.58) + '" height="' + (H * 0.12) +
+        '" fill="' + fg + '" opacity="' + (dark ? 0.22 : 0.1) + '"/>';
+    } else if (style === 4) { // 대각선
+      for (let i = -H; i < W + H; i += 18 + R() * 26) {
+        body += '<line x1="' + i.toFixed(0) + '" y1="' + H + '" x2="' + (i + H).toFixed(0) + '" y2="0" stroke="#0b0b0c" stroke-width="' +
+          (1 + R() * 6).toFixed(1) + '" opacity="' + (0.05 + R() * 0.4).toFixed(2) + '"/>';
+      }
+    } else { // 가로 바코드 + 원
+      let y = H * 0.12;
+      while (y < H * 0.9) {
+        const h = 2 + R() * 7;
+        body += '<rect x="' + (W * 0.1) + '" y="' + y.toFixed(0) + '" width="' + (W * (0.5 + R() * 0.4)).toFixed(0) +
+          '" height="' + h.toFixed(1) + '" fill="#0b0b0c" opacity="' + (0.12 + R() * 0.48).toFixed(2) + '"/>';
+        y += h + 6 + R() * 12;
+      }
+      body += '<circle cx="' + (W * 0.78) + '" cy="' + (H * 0.3) + '" r="' + (H * 0.14) + '" fill="#0b0b0c" opacity="0.9"/>';
+    }
+
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">' +
+      '<rect width="' + W + '" height="' + H + '" fill="' + bg + '"/>' + body + '</svg>';
+    return svg;
+  }
+  function artURI(seed) {
+    if (!artCache.has(seed)) {
+      artCache.set(seed, 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(artSVG(seed)));
+    }
+    return artCache.get(seed);
+  }
+
+  /* 시작 카드 (로컬 체험 모드) */
+  function seedItems() {
+    const samples = [
+      ['클레이 스튜디오 · 12월 클래스', '손으로 빚는 그릇, 한 달 네 번의 저녁 수업. 초보 환영.', 42, null, 'clay'],
+      ['포켓몬 도감 리디자인', '1세대 151마리를 모노크롬 카드로 다시 그리는 개인 프로젝트.', 27, null, 'dex'],
+      ['하루 만화방', '골목 안 작은 만화방. 신작 입고 목록은 링크에서 확인하세요.', 18, 'https://example.com', 'comic'],
+      ['체스 클럽 · 매주 토요일', '왕복 10분이면 오는 동네 카페에서 블리츠 대회를 엽니다.', 12, 'https://example.com', 'chess'],
+      ['세계사 노트 정리본 공유', 'EJU 세계사 흐름을 한 장씩 요약한 노트를 공유 중입니다.', 8, null, 'note'],
+      ['무명 레코드', '아무도 모르는 앨범을 매주 한 장씩 소개하는 뉴스레터.', 6, null, 'record'],
+      ['던전 앤 아트', '게임 속 배경을 그리는 작업실. 커미션 문의 받아요.', 5, null, 'dungeon'],
+      ['쿠키런 길드 모집', '주 3회 길드전, 무과금 환영. 마지막 자리 하나 남았어요.', 3, null, 'cookie'],
+      ['슬리더린 굿즈샵', '뱀의 집 굿즈만 모은 작은 상점. 12월 한정 판매.', 2, null, 'slytherin'],
+      ['리그 오브 스터디', '롤 대신 시험을 같이 보는 스터디. 새 멤버를 찾습니다.', 1, null, 'study']
+    ];
+    const t = Date.now() - samples.length * 60000;
+    return samples.map((s, i) => ({
+      id: 'seed-' + (i + 1),
+      title: s[0],
+      description: s[1],
+      link_url: s[3],
+      image_url: '',
+      art: s[4],
+      boost_count: s[2],
+      created_at: new Date(t + i * 60000).toISOString()
+    }));
+  }
+
+  /* ---------------- 3. 상태 ---------------- */
+  const state = {
+    mode: 'local',      // 'local' | 'cloud'
+    items: [],
+    mine: {},           // { itemId: 내가 준 부스트 횟수 }
+    currentId: null,    // 상세 모달 대상
+    pendingItem: null,  // 광고/결제 대상
+    loading: false
+  };
+  let sb = null;
+  const nodes = new Map();  // id -> tile element
+
+  const imageSrc = (item) => item.image_url || artURI(item.art || item.id);
+  const levelOf = (b) => (b <= 2 ? 1 : b <= 5 ? 2 : b <= 10 ? 3 : b <= 20 ? 4 : b <= 40 ? 5 : b <= 80 ? 6 : 7);
+  const ratioOf = (span) => (span >= 4 ? 0.74 : span === 3 ? 0.84 : 1);
+
+  function sortedItems() {
+    return state.items.slice().sort((a, b) => {
+      if (b.boost_count !== a.boost_count) return b.boost_count - a.boost_count;
+      return String(a.created_at).localeCompare(String(b.created_at));
+    });
+  }
+  function getItem(id) { return state.items.find((i) => i.id === id) || null; }
+
+  /* ---------------- 4. 마소니 레이아웃 ---------------- */
+  const LAYOUTS = [
+    { min: 1500, cols: 7, gap: 18, spans: [1, 2, 2, 2, 3, 3, 4] },
+    { min: 1200, cols: 6, gap: 18, spans: [1, 2, 2, 2, 3, 3, 4] },
+    { min: 900, cols: 5, gap: 16, spans: [1, 2, 2, 2, 3, 3, 3] },
+    { min: 620, cols: 4, gap: 14, spans: [1, 1, 2, 2, 2, 3, 3] },
+    { min: 360, cols: 3, gap: 12, spans: [1, 1, 1, 2, 2, 3, 3] },
+    { min: 0, cols: 2, gap: 10, spans: [1, 1, 1, 1, 1, 2, 2] }
+  ];
+  function pickLayout(w) {
+    for (let i = 0; i < LAYOUTS.length; i++) if (w >= LAYOUTS[i].min) return LAYOUTS[i];
+    return LAYOUTS[LAYOUTS.length - 1];
+  }
+
+  const board = $('#board');
+  let firstLayout = true;
+
+  function layout() {
+    const W = board.clientWidth;
+    if (!W) return;
+    const L = pickLayout(W);
+    const gap = L.gap;
+    const colW = (W - gap * (L.cols - 1)) / L.cols;
+    const heights = new Array(L.cols).fill(0);
+    const order = sortedItems();
+
+    order.forEach((item) => {
+      const el = nodes.get(item.id);
+      if (!el) return;
+      const level = levelOf(item.boost_count);
+      const span = clamp(L.spans[level - 1], 1, L.cols);
+      const w = span * colW + (span - 1) * gap;
+      const h = Math.round(w * ratioOf(span));
+
+      let bestStart = 0;
+      let bestTop = Infinity;
+      for (let j = 0; j + span <= L.cols; j++) {
+        let top = 0;
+        for (let k = 0; k < span; k++) top = Math.max(top, heights[j + k]);
+        if (top < bestTop - 0.5) { bestTop = top; bestStart = j; }
+      }
+      if (!isFinite(bestTop)) bestTop = 0;
+
+      const x = bestStart * (colW + gap);
+      el.style.width = w.toFixed(2) + 'px';
+      el.style.height = h + 'px';
+      el.style.transform = 'translate3d(' + x.toFixed(2) + 'px,' + bestTop.toFixed(2) + 'px,0)';
+      el.dataset.span = String(span);
+      el.dataset.level = String(level);
+      el.dataset.w = w.toFixed(1);
+
+      for (let k = 0; k < span; k++) heights[bestStart + k] = bestTop + h + gap;
+    });
+
+    const total = Math.max.apply(null, heights.concat([0])) - (order.length ? gap : 0);
+    board.style.height = Math.max(0, total) + 'px';
+
+    if (firstLayout && order.length) {
+      firstLayout = false;
+      // 첫 배치가 미끄러져 들어오지 않도록
+      $$('.tile', board).forEach((el) => el.classList.add('no-anim'));
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        $$('.tile', board).forEach((el) => el.classList.remove('no-anim'));
+      }));
+    }
+  }
+  const relayout = debounce(layout, 90);
+
+  /* ---------------- 5. 렌더링 ---------------- */
+  function tileFor(item) {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'tile no-anim';
+    el.dataset.id = item.id;
+
+    const img = document.createElement('img');
+    img.alt = '';
+    img.decoding = 'async';
+    img.src = imageSrc(item);
+    img.addEventListener('error', function () {
+      if (img.dataset.fallback) return;
+      img.dataset.fallback = '1';
+      img.src = artURI('fallback-' + item.id);
+    });
+
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerHTML = '<span class="fire" aria-hidden="true">🔥</span><b></b>';
+
+    const crown = document.createElement('span');
+    crown.className = 'crown';
+    crown.textContent = '1위';
+    crown.hidden = true;
+
+    const cap = document.createElement('span');
+    cap.className = 'cap';
+    const t = document.createElement('span');
+    t.className = 'cap-title';
+    const sub = document.createElement('span');
+    sub.className = 'cap-sub';
+    cap.appendChild(t); cap.appendChild(sub);
+
+    el.appendChild(img);
+    el.appendChild(chip);
+    el.appendChild(crown);
+    el.appendChild(cap);
+    el.addEventListener('click', () => openDetail(item.id));
+    return el;
+  }
+
+  function paintTile(el, item, rank) {
+    const img = el.querySelector('img');
+    const want = imageSrc(item);
+    if (img.getAttribute('src') !== want) img.src = want;
+    el.querySelector('.chip b').textContent = num(item.boost_count);
+    el.querySelector('.cap-title').textContent = item.title;
+    el.querySelector('.cap-sub').textContent = item.description || '';
+    const crown = el.querySelector('.crown');
+    crown.hidden = rank !== 1;
+    el.setAttribute('aria-label', item.title + ' · 부스트 ' + num(item.boost_count) + ' · 상세 보기');
+  }
+
+  function render() {
+    const order = sortedItems();
+    const ids = new Set(order.map((i) => i.id));
+
+    nodes.forEach((el, id) => {
+      if (!ids.has(id)) {
+        el.remove();
+        nodes.delete(id);
+      }
+    });
+
+    order.forEach((item, idx) => {
+      let el = nodes.get(item.id);
+      if (!el) {
+        el = tileFor(item);
+        nodes.set(item.id, el);
+        board.appendChild(el);
+      }
+      paintTile(el, item, idx + 1);
+    });
+
+    $('#boardCount').textContent = order.length + '개';
+    $('#empty').hidden = order.length > 0;
+    board.classList.toggle('is-empty', order.length === 0);
+    layout();
+  }
+
+  function bumpTile(id) {
+    const el = nodes.get(id);
+    if (!el) return;
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
+    const plus = document.createElement('span');
+    plus.className = 'plusone';
+    plus.textContent = '+1';
+    el.appendChild(plus);
+    setTimeout(() => plus.remove(), 1000);
+  }
+
+  /* ---------------- 6. 모달 ---------------- */
+  let lastFocus = null;
+  function openModal(sel) {
+    const m = $(sel);
+    lastFocus = document.activeElement;
+    m.classList.add('open');
+    m.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lock');
+    const focusable = m.querySelector('.x') || m.querySelector('button');
+    if (focusable) setTimeout(() => focusable.focus({ preventScroll: true }), 60);
+  }
+  function closeModal(sel) {
+    const m = $(sel);
+    if (!m || !m.classList.contains('open')) return;
+    m.classList.remove('open');
+    m.setAttribute('aria-hidden', 'true');
+    if (!$('.modal.open')) document.body.classList.remove('lock');
+    if (lastFocus && lastFocus.focus) { try { lastFocus.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  function closeAll() {
+    $$('.modal.open').forEach((m) => closeModal('#' + m.id));
+  }
+  document.addEventListener('click', (e) => {
+    const t = e.target;
+    if (t.closest && t.closest('[data-close]')) {
+      const m = t.closest('.modal');
+      if (m) closeModal('#' + m.id);
+    }
+    if (t.classList && t.classList.contains('modal')) closeModal('#' + t.id);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAll();
+  });
+
+  /* ---------------- 7. 부스트 3단계 ---------------- */
+  function boostState(item) {
+    const mine = state.mine[item.id] || 0;
+    if (mine < CONFIG.FREE_LIMIT) {
+      return { tier: 'free', mine: mine, left: CONFIG.FREE_LIMIT - mine };
+    }
+    if (mine < CONFIG.FREE_LIMIT + CONFIG.AD_LIMIT) {
+      return { tier: 'ad', mine: mine, left: CONFIG.FREE_LIMIT + CONFIG.AD_LIMIT - mine };
+    }
+    return { tier: 'paid', mine: mine, left: 0 };
+  }
+
+  function openDetail(id) {
+    const item = getItem(id);
+    if (!item) return;
+    state.currentId = id;
+    const order = sortedItems();
+    const rank = order.findIndex((i) => i.id === id) + 1;
+
+    $('#dImg').src = imageSrc(item);
+    $('#dImg').alt = item.title;
+    $('#dRank').textContent = rank + '위';
+    $('#dTotal').textContent = '전체 ' + order.length + '개 중';
+    $('#dBoost').textContent = '부스트 ' + num(item.boost_count);
+    $('#dTitle').textContent = item.title;
+    const desc = item.description || '';
+    $('#dDesc').textContent = desc || '소개가 아직 없어요.';
+    $('#dDesc').classList.toggle('desc-empty', !desc);
+
+    const link = safeUrl(item.link_url);
+    const a = $('#dLink');
+    if (link) { a.href = link; a.hidden = false; } else { a.hidden = true; a.removeAttribute('href'); }
+
+    refreshDetailTier();
+    openModal('#detailModal');
+  }
+
+  function refreshDetailTier() {
+    const item = getItem(state.currentId);
+    if (!item) return;
+    const st = boostState(item);
+    const chips = $$('#dTiers .tier');
+    chips.forEach((c) => {
+      const tier = c.dataset.tier;
+      c.dataset.active = String(tier === st.tier);
+      if (tier === 'free') c.textContent = '남은 무료 부스트 ' + (CONFIG.FREE_LIMIT - Math.min(st.mine, CONFIG.FREE_LIMIT)) + '/' + CONFIG.FREE_LIMIT;
+      if (tier === 'ad') {
+        const used = clamp(st.mine - CONFIG.FREE_LIMIT, 0, CONFIG.AD_LIMIT);
+        c.textContent = '광고 보고 키우기 ' + (CONFIG.AD_LIMIT - used) + '/' + CONFIG.AD_LIMIT;
+      }
+      if (tier === 'paid') c.textContent = '₩' + num(CONFIG.PRICE_KRW) + '/회';
+    });
+
+    const label = $('#dBoostLabel');
+    const fine = $('#dFine');
+    if (st.tier === 'free') {
+      label.textContent = '무료로 키우기 · ' + st.left + '회 남음';
+      fine.textContent = '부스트 1회마다 보드에서 한 단계 커져요';
+    } else if (st.tier === 'ad') {
+      label.textContent = '광고 보고 키우기 · ' + st.left + '/' + CONFIG.AD_LIMIT;
+      fine.textContent = '무료 부스트를 모두 썼어요. 짧은 광고로 ' + st.left + '회 더 키울 수 있어요';
+    } else {
+      label.textContent = '₩' + num(CONFIG.PRICE_KRW) + '으로 키우기';
+      fine.textContent = '무료 10회 · 광고 10회를 모두 사용했어요';
+    }
+  }
+
+  /* 실제 부스트 반영 (로컬 즉시 + 클라우드 RPC) */
+  function applyBoost(id, amount) {
+    const item = getItem(id);
+    if (!item) return;
+    item.boost_count += amount;
+    state.mine[id] = (state.mine[id] || 0) + amount;
+    store.set(KEY_MINE, state.mine);
+    if (state.mode === 'local') store.set(KEY_ITEMS, state.items);
+
+    bumpTile(id);
+    render();
+    if (state.currentId === id) {
+      const cur = getItem(id);
+      if (cur) {
+        $('#dBoost').textContent = '부스트 ' + num(cur.boost_count);
+        const order = sortedItems();
+        $('#dRank').textContent = (order.findIndex((i) => i.id === id) + 1) + '위';
+      }
+      refreshDetailTier();
+    }
+
+    if (state.mode === 'cloud' && sb) {
+      sb.rpc('increment_boost', { item_id: id, amount: amount }).then(({ error }) => {
+        if (error) {
+          item.boost_count -= amount;
+          state.mine[id] = Math.max(0, (state.mine[id] || amount) - amount);
+          store.set(KEY_MINE, state.mine);
+          render();
+          if (state.currentId === id) refreshDetailTier();
+          toast('부스트를 올리지 못했어요 · 잠시 후 다시');
+        }
+      });
+    }
+  }
+
+  $('#dBoostBtn').addEventListener('click', () => {
+    const item = getItem(state.currentId);
+    if (!item) return;
+    const st = boostState(item);
+    if (st.tier === 'free') {
+      applyBoost(item.id, 1);
+      toast('부스트 +1 · 보드에서 커졌어요');
+    } else if (st.tier === 'ad') {
+      state.pendingItem = item.id;
+      startAd();
+    } else {
+      state.pendingItem = item.id;
+      startPay();
+    }
+  });
+
+  /* --- 2단계: 리워드 광고 --- */
+  let adTimer = null;
+  function startAd() {
+    const item = getItem(state.pendingItem);
+    if (!item) return;
+    closeModal('#detailModal');
+    $('#adBig').textContent = item.title;
+    $('#adGet').disabled = true;
+    $('#adGet').textContent = '부스트 받기';
+    $('#adBar').style.transition = 'none';
+    $('#adBar').style.width = '0%';
+    openModal('#adModal');
+
+    const total = CONFIG.AD_SECONDS;
+    let left = total;
+    $('#adTimer').innerHTML = '<b>' + left + '</b>초 후 부스트를 받을 수 있어요';
+    requestAnimationFrame(() => {
+      $('#adBar').style.transition = 'width ' + total + 's linear';
+      $('#adBar').style.width = '100%';
+    });
+
+    clearInterval(adTimer);
+    adTimer = setInterval(() => {
+      left -= 1;
+      if (left > 0) {
+        $('#adTimer').innerHTML = '<b>' + left + '</b>초 후 부스트를 받을 수 있어요';
+      } else {
+        clearInterval(adTimer);
+        $('#adTimer').innerHTML = '시청 완료 · 부스트를 받을 수 있어요';
+        $('#adGet').disabled = false;
+      }
+    }, 1000);
+  }
+
+  function finishAd() {
+    const id = state.pendingItem;
+    if (!id) return;
+    applyBoost(id, 1);
+    toast('광고 시청 완료 · 부스트 +1');
+    closeModal('#adModal');
+    state.pendingItem = null;
+    if (getItem(id)) openDetail(id);
+  }
+
+  $('#adGet').addEventListener('click', () => {
+    /* TODO: AdSense / Rewarded Ad SDK hook — 광고 완료 콜백에서 이 함수를 호출하세요. */
+    finishAd();
+  });
+
+  /* --- 3단계: 소액 결제 --- */
+  function startPay() {
+    const item = getItem(state.pendingItem);
+    if (!item) return;
+    closeModal('#detailModal');
+    $('#payItem').textContent = item.title;
+    $('#payTestBadge').textContent = isPlaceholder(CONFIG.TOSS_CLIENT_KEY)
+      ? '● 테스트 모드 · 실제 결제가 발생하지 않습니다'
+      : '● 결제 모듈 연결됨';
+    openModal('#payModal');
+  }
+
+  $('#payBtn').addEventListener('click', () => {
+    /* TODO: Toss Payments / Stripe / Ko-fi hook — PG 결제 승인 후 finishPay()를 호출하세요. */
+    const id = state.pendingItem;
+    if (!id) return;
+    const btn = $('#payBtn');
+    btn.disabled = true;
+    btn.textContent = '처리 중…';
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = '테스트 결제로 부스트';
+      applyBoost(id, 1);
+      toast('결제(테스트) 완료 · 부스트 +1');
+      closeModal('#payModal');
+      state.pendingItem = null;
+      if (getItem(id)) openDetail(id);
+    }, 700);
+  });
+
+  /* ---------------- 8. 업로드 ---------------- */
+  let pickedFile = null;
+  let pickedPreviewUrl = '';
+  let uploadMode = 'file';
+
+  function openUpload() {
+    resetUpload();
+    openModal('#upModal');
+    setTimeout(() => $('#upTitle').focus({ preventScroll: true }), 120);
+  }
+  function resetUpload() {
+    pickedFile = null;
+    if (pickedPreviewUrl) { URL.revokeObjectURL(pickedPreviewUrl); pickedPreviewUrl = ''; }
+    const dp = $('#dropPreview');
+    dp.hidden = true; dp.removeAttribute('src');
+    $('#drop').classList.remove('has', 'drag');
+    $('#dropBig').hidden = false; $('#dropHint').hidden = false; $('#dropSwap').hidden = true;
+    $('#fileInput').value = '';
+    $('#upTitle').value = ''; $('#upDesc').value = ''; $('#upLink').value = ''; $('#upImageUrl').value = '';
+    $('#descCount').textContent = '0';
+    $('#upErr').hidden = true;
+    setUploadMode('file');
+  }
+  function setUploadMode(mode) {
+    uploadMode = mode;
+    const fileOn = mode === 'file';
+    $('#segFile').setAttribute('aria-pressed', String(fileOn));
+    $('#segUrl').setAttribute('aria-pressed', String(!fileOn));
+    $('#drop').hidden = !fileOn;
+    $('#urlField').hidden = fileOn;
+  }
+  $('#segFile').addEventListener('click', () => setUploadMode('file'));
+  $('#segUrl').addEventListener('click', () => setUploadMode('url'));
+
+  $('#fab').addEventListener('click', openUpload);
+  $('#upDesc').addEventListener('input', (e) => { $('#descCount').textContent = String(e.target.value.length); });
+
+  $('#drop').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('#fileInput').click(); }
+  });
+  $('#drop').addEventListener('dragover', (e) => { e.preventDefault(); $('#drop').classList.add('drag'); });
+  $('#drop').addEventListener('dragleave', () => $('#drop').classList.remove('drag'));
+  $('#drop').addEventListener('drop', (e) => {
+    e.preventDefault();
+    $('#drop').classList.remove('drag');
+    const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) takeFile(f);
+  });
+  $('#fileInput').addEventListener('change', (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (f) takeFile(f);
+  });
+
+  function takeFile(file) {
+    if (!/^image\//.test(file.type)) { showUpErr('이미지 파일만 올릴 수 있어요.'); return; }
+    if (file.size > 12 * 1024 * 1024) { showUpErr('12MB 이하 이미지를 올려 주세요.'); return; }
+    pickedFile = file;
+    if (pickedPreviewUrl) URL.revokeObjectURL(pickedPreviewUrl);
+    pickedPreviewUrl = URL.createObjectURL(file);
+    const dp = $('#dropPreview');
+    dp.src = pickedPreviewUrl; dp.hidden = false;
+    $('#drop').classList.add('has');
+    $('#dropBig').hidden = true; $('#dropHint').hidden = true; $('#dropSwap').hidden = false;
+    $('#upErr').hidden = true;
+  }
+
+  function showUpErr(msg) { const e = $('#upErr'); e.textContent = msg; e.hidden = false; }
+
+  async function loadBitmap(file) {
+    if (window.createImageBitmap) {
+      try { return await createImageBitmap(file); } catch (e) { /* fall through */ }
+    }
+    return new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = rej;
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  async function compress(file, maxSide) {
+    const bmp = await loadBitmap(file);
+    const w = bmp.width, h = bmp.height;
+    const scale = Math.min(1, maxSide / Math.max(w, h));
+    const cw = Math.max(1, Math.round(w * scale));
+    const ch = Math.max(1, Math.round(h * scale));
+    const canvas = document.createElement('canvas');
+    canvas.width = cw; canvas.height = ch;
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(bmp, 0, 0, cw, ch);
+    const blob = await new Promise((res) => canvas.toBlob(res, 'image/jpeg', 0.82));
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.78);
+    return { blob: blob, dataUrl: dataUrl, width: cw, height: ch };
+  }
+
+  $('#upSubmit').addEventListener('click', async () => {
+    const title = $('#upTitle').value.trim();
+    const desc = $('#upDesc').value.trim();
+    const linkRaw = $('#upLink').value.trim();
+    const imgUrl = $('#upImageUrl').value.trim();
+
+    if (!title) { showUpErr('제목을 입력해 주세요.'); return; }
+    if (uploadMode === 'file' && !pickedFile) { showUpErr('이미지를 선택해 주세요.'); return; }
+    if (uploadMode === 'url' && !safeUrl(imgUrl)) { showUpErr('http(s)로 시작하는 이미지 주소를 넣어 주세요.'); return; }
+    if (linkRaw && !safeUrl(linkRaw)) { showUpErr('링크는 http(s) 주소여야 해요.'); return; }
+
+    const btn = $('#upSubmit');
+    btn.disabled = true;
+    btn.textContent = '올리는 중…';
+    $('#upErr').hidden = true;
+
+    try {
+      let imageUrl = '';
+      if (uploadMode === 'file') {
+        const maxSide = state.mode === 'cloud' ? CONFIG.MAX_UPLOAD_SIDE : CONFIG.LOCAL_UPLOAD_SIDE;
+        const out = await compress(pickedFile, maxSide);
+        if (state.mode === 'cloud' && sb) {
+          const path = uid() + '.jpg';
+          const up = await sb.storage.from(CONFIG.BUCKET).upload(path, out.blob, { contentType: 'image/jpeg', upsert: false });
+          if (up.error) throw up.error;
+          const pub = sb.storage.from(CONFIG.BUCKET).getPublicUrl(path);
+          imageUrl = pub.data.publicUrl;
+        } else {
+          imageUrl = out.dataUrl;
+        }
+      } else {
+        imageUrl = safeUrl(imgUrl);
+      }
+
+      const item = {
+        id: uid(),
+        title: title,
+        description: desc,
+        link_url: safeUrl(linkRaw) || null,
+        image_url: imageUrl,
+        art: '',
+        boost_count: 1,
+        created_at: nowISO()
+      };
+
+      if (state.mode === 'cloud' && sb) {
+        const ins = await sb.from('promo_items').insert({
+          title: item.title,
+          description: item.description,
+          link_url: item.link_url,
+          image_url: item.image_url,
+          boost_count: 1
+        }).select().single();
+        if (ins.error) throw ins.error;
+        if (ins.data) { item.id = ins.data.id; item.created_at = ins.data.created_at; }
+      }
+
+      if (!getItem(item.id)) state.items.push(item);
+      if (state.mode === 'local') {
+        const ok = store.set(KEY_ITEMS, state.items);
+        if (!ok) {
+          toast('로컬 저장 공간이 가득 찼어요 · 이미지를 조금 줄여 주세요');
+        }
+      }
+      render();
+      closeModal('#upModal');
+      toast('보드에 올렸어요');
+      setTimeout(() => { const el = nodes.get(item.id); if (el) el.classList.add('bump'); }, 80);
+    } catch (err) {
+      console.error(err);
+      showUpErr('올리지 못했어요. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '보드에 올리기';
+    }
+  });
+
+  /* ---------------- 9. Supabase (실시간 공유) ---------------- */
+  function setMode(kind, text) {
+    const badge = $('#modeBadge');
+    const txt = $('#modeText');
+    if (!text) { badge.hidden = true; return; }
+    badge.hidden = false;
+    badge.dataset.mode = kind;
+    txt.textContent = text;
+  }
+
+  function loadSupabaseSDK() {
+    return new Promise((resolve, reject) => {
+      if (window.supabase && window.supabase.createClient) { resolve(window.supabase); return; }
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+      s.async = true;
+      s.onload = () => (window.supabase ? resolve(window.supabase) : reject(new Error('no sdk')));
+      s.onerror = () => reject(new Error('sdk load failed'));
+      document.head.appendChild(s);
+    });
+  }
+
+  function normalize(row) {
+    return {
+      id: row.id,
+      title: row.title || '',
+      description: row.description || '',
+      link_url: row.link_url || null,
+      image_url: row.image_url || '',
+      art: '',
+      boost_count: row.boost_count || 1,
+      created_at: row.created_at || nowISO()
+    };
+  }
+
+  function isSetupPending(err) {
+    if (!err) return false;
+    const code = String(err.code || '');
+    const msg = String(err.message || '') + ' ' + String(err.details || '');
+    return code === 'PGRST205' || code === '42P01' ||
+      /could not find the table|schema cache|does not exist/i.test(msg);
+  }
+
+  let cloudChannel = null;
+  let cloudTrying = false;
+
+  async function connectCloud() {
+    if (cloudTrying) return;
+    cloudTrying = true;
+    try {
+      if (!sb) {
+        const sdk = await loadSupabaseSDK();
+        sb = sdk.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+      }
+
+      const res = await sb.from('promo_items').select('*').order('created_at', { ascending: true });
+      if (res.error) throw res.error;
+
+      // 대기 중에 이 브라우저에서 올린 카드는 클라우드로 옮겨 줍니다.
+      const locals = state.items.filter((i) => i.isLocal);
+
+      state.items = (res.data || []).map(normalize);
+      state.mode = 'cloud';
+      setMode('cloud', '실시간 공유 중 · Supabase');
+      $('#setupBar').hidden = true;
+      render();
+      subscribeCloud();
+
+      if (locals.length) await migrateLocalCards(locals);
+    } finally {
+      cloudTrying = false;
+    }
+  }
+
+  async function migrateLocalCards(locals) {
+    let moved = 0;
+    const left = [];
+    for (const it of locals) {
+      try {
+        let imageUrl = it.image_url;
+        if (/^data:image\//.test(imageUrl)) {
+          const blob = await (await fetch(imageUrl)).blob();
+          const path = uid() + '.jpg';
+          const up = await sb.storage.from(CONFIG.BUCKET).upload(path, blob, { contentType: 'image/jpeg', upsert: false });
+          if (up.error) throw up.error;
+          imageUrl = sb.storage.from(CONFIG.BUCKET).getPublicUrl(path).data.publicUrl;
+        }
+        const ins = await sb.from('promo_items').insert({
+          title: it.title, description: it.description, link_url: it.link_url,
+          image_url: imageUrl, boost_count: 1
+        }).select().single();
+        if (ins.error) throw ins.error;
+        moved += 1;
+      } catch (e) {
+        left.push(it);
+      }
+    }
+    if (moved) {
+      store.set(KEY_ITEMS, left);
+      const res = await sb.from('promo_items').select('*').order('created_at', { ascending: true });
+      if (!res.error) { state.items = (res.data || []).map(normalize); render(); }
+      toast('이 브라우저에서 올린 카드 ' + moved + '개를 보드로 옮겼어요');
+    }
+  }
+
+  function subscribeCloud() {
+    if (cloudChannel || !sb) return;
+    cloudChannel = sb.channel('promo_items')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'promo_items' }, (payload) => {
+        const type = payload.eventType;
+        if (type === 'INSERT') {
+          if (payload.new && !getItem(payload.new.id)) {
+            state.items.push(normalize(payload.new));
+            render();
+          }
+        } else if (type === 'UPDATE') {
+          const it = payload.new && getItem(payload.new.id);
+          if (it && typeof payload.new.boost_count === 'number') {
+            it.boost_count = payload.new.boost_count;
+            it.title = payload.new.title || it.title;
+            render();
+            if (state.currentId === it.id) {
+              $('#dBoost').textContent = '부스트 ' + num(it.boost_count);
+              const order = sortedItems();
+              $('#dRank').textContent = (order.findIndex((i) => i.id === it.id) + 1) + '위';
+              refreshDetailTier();
+            }
+          }
+        } else if (type === 'DELETE') {
+          const id = payload.old && payload.old.id;
+          if (id) { state.items = state.items.filter((i) => i.id !== id); render(); }
+        }
+      })
+      .subscribe();
+  }
+
+  /* DB가 아직 없을 때: 로컬로 계속 쓰면서 8초마다 다시 확인 */
+  let retryTimer = null;
+  function startRetry() {
+    if (retryTimer) return;
+    retryTimer = setInterval(async () => {
+      try {
+        await connectCloud();
+        clearInterval(retryTimer);
+        retryTimer = null;
+        toast('실시간 공유 보드에 연결됐어요');
+      } catch (e) { /* 아직 준비되지 않음 */ }
+    }, 8000);
+  }
+
+  $('#setupRetry').addEventListener('click', async () => {
+    const btn = $('#setupRetry');
+    btn.disabled = true;
+    btn.textContent = '확인 중…';
+    try {
+      await connectCloud();
+      toast('실시간 공유 보드에 연결됐어요');
+    } catch (e) {
+      toast(isSetupPending(e) ? '아직 테이블이 없어요 · SQL을 실행한 뒤 다시 눌러 주세요' : '연결하지 못했어요 · 잠시 후 다시');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '다시 확인';
+    }
+  });
+
+  /* ---------------- 10. 시작 ---------------- */
+  function bootLocal() {
+    if (!Array.isArray(state.items) || !state.items.length) {
+      const stored = store.get(KEY_ITEMS, null);
+      state.items = (Array.isArray(stored) && stored.length) ? stored : seedItems();
+      store.set(KEY_ITEMS, state.items);
+    }
+    state.mine = store.get(KEY_MINE, {}) || {};
+    state.mode = 'local';
+    render();
+  }
+
+  async function boot() {
+    const qs = location.search;
+    // 테스트/초기화용: ?reset=1 (저장된 카드·부스트 기록 삭제)
+    if (/[?&]reset=1/.test(qs)) {
+      store.clear();
+      history.replaceState(null, '', location.pathname);
+    }
+    // 로컬 미리보기: ?local=1 (Supabase에 붙지 않고 이 브라우저에서만)
+    const forceLocal = /[?&]local=1/.test(qs);
+    const cloudConfigured = !isPlaceholder(CONFIG.SUPABASE_URL) && !isPlaceholder(CONFIG.SUPABASE_ANON_KEY);
+    state.mine = store.get(KEY_MINE, {}) || {};
+
+    if (cloudConfigured && !forceLocal) {
+      try {
+        await connectCloud();
+      } catch (err) {
+        bootLocal();
+        if (isSetupPending(err)) {
+          setMode('waiting', 'DB 초기화 대기 중 · supabase_schema.sql 실행 필요');
+          $('#setupBar').hidden = false;
+          startRetry();
+        } else {
+          setMode('local', '로컬 체험 모드 · Supabase 연결 실패');
+          console.warn('[화이트보드] Supabase 연결 실패:', err && (err.message || err));
+          toast('Supabase에 연결하지 못해 로컬 체험 모드로 열었어요');
+        }
+      }
+    } else {
+      bootLocal();
+      setMode('local', forceLocal && cloudConfigured
+        ? '로컬 미리보기 모드 · 이 브라우저에만 저장'
+        : '로컬 체험 모드 · Supabase 연결 시 실시간 공유');
+    }
+
+    const b = $('#boot');
+    b.classList.add('gone');
+    setTimeout(() => b.remove(), 400);
+  }
+
+  window.addEventListener('resize', relayout);
+  window.addEventListener('orientationchange', relayout);
+  window.addEventListener('scroll', () => {
+    $('#top').classList.toggle('scrolled', window.scrollY > 6);
+  }, { passive: true });
+
+  // 테스트용 최소 훅 (앱 동작에는 영향 없음)
+  window.__whiteboard = {
+    state: state,
+    config: CONFIG,
+    sorted: sortedItems,
+    layout: layout,
+    openItem: openDetail,
+    boost: applyBoost,
+    boostState: boostState,
+    render: render
+  };
+
+  boot();
+})();
+</script>
+</body>
+</html>
