@@ -196,3 +196,9 @@ open "index.html?reset=1"
   - 이미지 업로드(압축 포함) → 보드에 추가 → 상세에서 링크 노출
   - 콘솔 에러 0
 - Supabase 미초기화 상태에서 `DB 초기화 대기 중` 안내 + 예시 카드 표시 확인
+- **라이브 배포 확인** (2026-11-27, <https://nugj12-code.github.io/Promo-board/>)
+  - HTTP 200 · 배지 `실시간 공유 중 · Supabase` · Realtime 채널 `joined`
+  - `promo_items` 조회 200 · `increment_boost` RPC 응답 확인 · `board-images` 버킷 공개 읽기 확인
+  - 콘솔 에러 0 · 실패한 요청 0
+
+> 배포 직후 보드는 비어 있습니다(테이블 0행). `+ 올리기`로 첫 카드를 올리면 그때부터 실시간 공유가 시작됩니다.
