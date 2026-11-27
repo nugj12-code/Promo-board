@@ -284,6 +284,10 @@ open "index.html?reset=1"
 - 클라우드(네트워크만 모의, 실제 DB 쓰기 0건): 컬럼이 없으면 `POST /rest/v1/promo_items` 본문에 `nickname` 이 없고 안내 문구가 보임 · 있으면 `nickname` 이 실려 저장됨 · 두 경우 모두 글이 올라가고 콘솔 에러 0
 - 실제 Supabase 조회(읽기 전용): `nickColumn = false` · `실시간 공유 중 · Supabase` · 카드 1개 · 안내 문구 표시 · 콘솔 에러 0
 - 다크 화면: 보드·상세 모달·올리기 창에서 글자 대비 유지(제목 `rgb(242,242,245)` / 시트 `rgb(21,21,25)`) · 가로 스크롤 0
+- **라이브 배포 확인** (2026-11-28, <https://nugj12-code.github.io/Promo-board/> — 390×844): HTTP 200 · 배포본 `index.html` md5 가 커밋 `70adce4` 와 동일
+  · 배지 `실시간 공유 중 · Supabase` · 카드 1개 · `nickColumn = false`(DB에 컬럼 없음) + 안내 문구 표시
+  · 올리기 창 첫 입력 `upNick` · 자동 포커스 · 피클 카드 상세 `익명` · 🌙 클릭 → `rgb(11,11,13)` · `promo_board_theme_v1 = light`
+  · 콘솔 에러 0 · 4xx/5xx 0 · 실패 요청 0 · `live-preview.png` · `live-preview-dark.png` 는 이 라이브 화면 캡처
 
 **가짜 광고·결제 UI 제거 · 바로 부스트 개편** (2026-11-27, 헤드리스 Chrome — 390×844 모바일 / 1440×900 데스크톱, `?local=1` 로컬 모드)
 
