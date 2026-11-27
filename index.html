@@ -6,20 +6,20 @@
 <meta name="color-scheme" content="light" />
 <meta name="theme-color" content="#ffffff" />
 <title>화이트 보드 홍보판</title>
-<meta name="description" content="부스트가 많을수록 더 크게 보이는, 순백의 공유 홍보판." />
+<meta name="description" content="부스트가 많을수록 더 크게 떠오르는, 순백의 공유 홍보판." />
 <link rel="canonical" href="https://nugj12-code.github.io/Promo-board/" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="화이트 보드 홍보판" />
 <meta property="og:title" content="화이트 보드 홍보판" />
-<meta property="og:description" content="부스트가 많을수록 더 크게 보이는, 순백의 공유 홍보판. 이미지를 올리고 부스트로 키워 보세요." />
+<meta property="og:description" content="동그란 홍보 거품이 떠다니는 순백의 공유 홍보판. 부스트가 많을수록 더 크게 떠오릅니다." />
 <meta property="og:url" content="https://nugj12-code.github.io/Promo-board/" />
 <meta property="og:image" content="https://nugj12-code.github.io/Promo-board/og.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="순백의 보드 위에 크기가 다른 홍보 카드들이 놓여 있는 화면" />
+<meta property="og:image:alt" content="순백의 캔버스 위에 크기가 다른 둥근 홍보 거품들이 떠 있는 화면" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="화이트 보드 홍보판" />
-<meta name="twitter:description" content="부스트가 많을수록 더 크게 보이는, 순백의 공유 홍보판." />
+<meta name="twitter:description" content="동그란 홍보 거품이 떠다니는 순백의 공유 홍보판. 부스트가 많을수록 더 크게 떠오릅니다." />
 <meta name="twitter:image" content="https://nugj12-code.github.io/Promo-board/og.png" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0c'/%3E%3Crect x='17' y='7' width='8' height='8' rx='2' fill='%23fff'/%3E%3C/svg%3E" />
 <style>
@@ -43,7 +43,8 @@
 *{box-sizing:border-box}
 [hidden]{display:none !important}
 html,body{background:var(--bg)}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;height:100%}
+body{overflow:hidden}
 body{
   margin:0;color:var(--ink);font-family:var(--font);
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
@@ -55,7 +56,11 @@ button{font-family:inherit}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
 /* ---------- 레이아웃 ---------- */
-.app{max-width:1560px;margin:0 auto;padding:0 clamp(14px,3vw,40px) 132px}
+.app{
+  position:relative;width:100%;max-width:1560px;height:100vh;height:100dvh;
+  margin:0 auto;display:flex;flex-direction:column;
+  padding:0 clamp(12px,2.4vw,34px);
+}
 
 /* ---------- 헤더 ---------- */
 .top{
@@ -105,63 +110,60 @@ h1 .thin{font-weight:500;color:var(--muted);letter-spacing:-.02em}
 }
 .setupbar .sb-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-/* ---------- 보드 ---------- */
-.board{position:relative;margin-top:16px;width:100%;min-height:120px}
-.board.is-empty{min-height:min(58vh,480px)}
-.tile{
-  position:absolute;top:0;left:0;padding:0;margin:0;display:block;
-  border:1px solid var(--line);border-radius:var(--radius);background:#fafafa;
-  box-shadow:var(--shadow-1);overflow:hidden;cursor:pointer;text-align:left;
+/* ---------- 보드: 둥근 거품 캔버스 ---------- */
+.board{
+  position:relative;flex:1 1 auto;min-height:0;width:100%;
+  margin:0;overflow:hidden;background:#fff;
+}
+.board.is-empty{min-height:200px}
+
+.bubble{
+  position:absolute;top:0;left:0;padding:0;margin:0;display:block;opacity:0;
+  border:1px solid rgba(10,10,12,.07);border-radius:50%;
+  background:#f5f5f6;overflow:hidden;cursor:pointer;appearance:none;
+  box-shadow:0 1px 2px rgba(10,10,12,.05),0 16px 36px -24px rgba(10,10,12,.42);
   container-type:inline-size;
-  transition:width .55s var(--ease),height .55s var(--ease),transform .55s var(--ease),box-shadow .25s var(--ease),border-color .25s;
-  will-change:width,height,transform;
+  will-change:transform;
+  -webkit-tap-highlight-color:transparent;
+  transition:box-shadow .28s var(--ease),border-color .28s var(--ease),opacity .5s var(--ease);
 }
-.tile.no-anim{transition:none}
-.tile:hover{box-shadow:var(--shadow-2);border-color:var(--line-strong)}
-.tile:active{transform-origin:center}
-.tile img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#f1f1f3}
-.tile .cap{
-  position:absolute;left:0;right:0;bottom:0;pointer-events:none;
-  padding:clamp(6px,3.2cqw,13px) clamp(7px,3.8cqw,15px) clamp(7px,3.6cqw,14px);
-  background:rgba(255,255,255,.96);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-  border-top:1px solid rgba(10,10,12,.045);
+.bubble.in{opacity:1}
+.bubble img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  background:#f1f1f3;
+  transition:transform .55s var(--ease);
 }
-.tile .cap-title{
-  display:block;font-size:clamp(10px,5.4cqw,15px);font-weight:750;letter-spacing:-.03em;color:var(--ink);
-  line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+.bubble:hover,.bubble:focus-visible{
+  border-color:rgba(10,10,12,.15);
+  box-shadow:0 2px 6px rgba(10,10,12,.08),0 26px 58px -26px rgba(10,10,12,.52);
 }
-.tile .cap-sub{
-  display:block;margin-top:2px;font-size:clamp(8.5px,4cqw,12px);font-weight:500;color:#6f6f75;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  opacity:0;transform:translateY(3px);transition:opacity .3s var(--ease),transform .3s var(--ease);
+.bubble:hover img,.bubble:focus-visible img{transform:scale(1.045)}
+.bubble:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.bubble.top{
+  box-shadow:0 0 0 1.5px var(--ink),0 2px 6px rgba(10,10,12,.08),0 22px 50px -26px rgba(10,10,12,.5);
 }
-.tile[data-span="1"] .cap-sub{display:none}
-.tile:hover .cap-sub,.tile:focus-visible .cap-sub{opacity:1;transform:none}
-.tile .chip{
-  position:absolute;top:clamp(6px,3cqw,12px);right:clamp(6px,3cqw,12px);
-  display:inline-flex;align-items:center;gap:3px;
-  font-size:clamp(9px,3.9cqw,12px);font-weight:750;font-variant-numeric:tabular-nums;
-  color:var(--ink);background:rgba(255,255,255,.92);border:1px solid rgba(10,10,12,.08);
-  padding:2px 7px;border-radius:999px;line-height:1.35;
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+.bubble .chip{
+  position:absolute;left:50%;bottom:8%;transform:translateX(-50%);
+  display:inline-flex;align-items:center;gap:.16em;
+  font-size:clamp(9px,9.4cqw,14px);font-weight:750;line-height:1;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:#111;
+  background:rgba(255,255,255,.84);
+  border:1px solid rgba(255,255,255,.55);border-radius:999px;
+  padding:.36em .66em;white-space:nowrap;pointer-events:none;
+  -webkit-backdrop-filter:blur(10px) saturate(150%);backdrop-filter:blur(10px) saturate(150%);
+  box-shadow:0 1px 2px rgba(10,10,12,.12);
 }
-.tile .chip .fire{font-size:.95em;filter:saturate(.15)}
-.tile .crown{
-  position:absolute;top:clamp(6px,3cqw,12px);left:clamp(6px,3cqw,12px);
-  font-size:clamp(8.5px,3.5cqw,11px);font-weight:800;letter-spacing:0;
-  background:var(--ink);color:#fff;padding:2px 7px;border-radius:999px;line-height:1.4;
-}
-.tile.bump img{animation:bumpimg .6s var(--ease)}
-@keyframes bumpimg{0%{transform:scale(1)}35%{transform:scale(1.035)}100%{transform:scale(1)}}
+.bubble .chip .fire{font-size:.9em;filter:grayscale(1) opacity(.6)}
+.bubble.bump img{animation:bumpimg .7s var(--ease)}
+@keyframes bumpimg{0%{transform:scale(1)}38%{transform:scale(1.07)}100%{transform:scale(1)}}
 .plusone{
-  position:absolute;right:12px;bottom:12px;pointer-events:none;
-  font-size:13px;font-weight:800;color:var(--ink);
-  background:rgba(255,255,255,.95);border:1px solid rgba(10,10,12,.08);
-  padding:3px 9px;border-radius:999px;opacity:0;
-  animation:plusone 1s var(--ease);
+  position:absolute;left:50%;top:26%;transform:translateX(-50%);pointer-events:none;
+  font-size:clamp(10px,9.6cqw,15px);font-weight:800;letter-spacing:-.03em;color:#111;
+  background:rgba(255,255,255,.94);border:1px solid rgba(10,10,12,.08);
+  padding:.24em .5em;border-radius:999px;opacity:0;
+  animation:plusone 1.05s var(--ease);
 }
-@keyframes plusone{0%{opacity:0;transform:translateY(6px) scale(.9)}25%{opacity:1}100%{opacity:0;transform:translateY(-22px) scale(.98)}}
+@keyframes plusone{0%{opacity:0;transform:translate(-50%,6px) scale(.9)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-26px) scale(.98)}}
 
 /* 빈 보드 */
 .empty{
@@ -351,7 +353,6 @@ h1 .thin{font-weight:500;color:var(--muted);letter-spacing:-.02em}
   .mode-badge{font-size:10px;padding:5px 9px}
   .tagline{padding-left:0;font-size:11px}
   h1{font-size:16.5px}
-  .app{padding-bottom:120px}
   .toast{bottom:auto;top:calc(10px + env(safe-area-inset-top));transform:translate(-50%,-14px)}
   .toast.show{transform:translate(-50%,0)}
 }
@@ -419,7 +420,7 @@ h1 .thin{font-weight:500;color:var(--muted);letter-spacing:-.02em}
         <span aria-hidden="true">🔥</span><span id="dBoostLabel">크게 키우기</span>
         <span class="cost" id="dBoostCost">무료 10회</span>
       </button>
-      <p class="fine" id="dFine">부스트 1회마다 보드에서 한 단계 커져요</p>
+      <p class="fine" id="dFine">부스트할수록 거품이 조금씩 커져요</p>
     </div>
   </div>
 </div>
@@ -734,11 +735,9 @@ const CONFIG = {
     loading: false
   };
   let sb = null;
-  const nodes = new Map();  // id -> tile element
 
   const imageSrc = (item) => item.image_url || artURI(item.art || item.id);
   const levelOf = (b) => (b <= 2 ? 1 : b <= 5 ? 2 : b <= 10 ? 3 : b <= 20 ? 4 : b <= 40 ? 5 : b <= 80 ? 6 : 7);
-  const ratioOf = (span) => (span >= 4 ? 0.74 : span === 3 ? 0.84 : 1);
 
   function sortedItems() {
     return state.items.slice().sort((a, b) => {
@@ -748,79 +747,224 @@ const CONFIG = {
   }
   function getItem(id) { return state.items.find((i) => i.id === id) || null; }
 
-  /* ---------------- 4. 마소니 레이아웃 ---------------- */
-  const LAYOUTS = [
-    { min: 1500, cols: 7, gap: 18, spans: [1, 2, 2, 2, 3, 3, 4] },
-    { min: 1200, cols: 6, gap: 18, spans: [1, 2, 2, 2, 3, 3, 4] },
-    { min: 900, cols: 5, gap: 16, spans: [1, 2, 2, 2, 3, 3, 3] },
-    { min: 620, cols: 4, gap: 14, spans: [1, 1, 2, 2, 2, 3, 3] },
-    { min: 360, cols: 3, gap: 12, spans: [1, 1, 1, 2, 2, 3, 3] },
-    { min: 0, cols: 2, gap: 10, spans: [1, 1, 1, 1, 1, 2, 2] }
-  ];
-  function pickLayout(w) {
-    for (let i = 0; i < LAYOUTS.length; i++) if (w >= LAYOUTS[i].min) return LAYOUTS[i];
-    return LAYOUTS[LAYOUTS.length - 1];
+  /* ---------------- 4. 거품 물리 캔버스 (requestAnimationFrame) ----------------
+     - 순백 캔버스 위를 둥근 거품이 아주 느긋하게 떠다닙니다.
+     - 부스트가 많을수록 반지름이 커지고(최대/최소는 화면에 맞춰 조정),
+       서로 밀어내며 벽에서 부드럽게 튕깁니다.
+     - prefers-reduced-motion 에서는 움직이지 않고 자리만 잡습니다.
+     ------------------------------------------------------------------------ */
+  /* 부스트 → 크기 계수. 단계로 끊지 않고 부드러운 로그 곡선이라
+     한 번 올릴 때마다 조금씩 자라고, 많이 올린 거품은 확실히 커집니다. */
+  const sizeFactor = function (boost) { return 0.46 + 0.175 * Math.log2(1 + Math.max(0, boost || 0)); };
+  const PAD = 6;                 // 캔버스 가장자리 여백(px)
+  const stage = $('#board');
+  const bubbles = new Map();     // id -> 거품 상태
+
+  let W = 0, H = 0;
+  let rafId = 0, lastT = 0, paused = false;
+
+  const motionQuery = (function () {
+    try { return window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null; }
+    catch (e) { return null; }
+  })();
+  let reduceMotion = !!(motionQuery && motionQuery.matches);
+  if (motionQuery && motionQuery.addEventListener) {
+    motionQuery.addEventListener('change', function () {
+      reduceMotion = motionQuery.matches;
+      render();
+    });
   }
 
-  const board = $('#board');
-  let firstLayout = true;
+  function measureStage() {
+    const r = stage.getBoundingClientRect();
+    W = Math.max(1, Math.round(r.width));
+    H = Math.max(1, Math.round(r.height));
+  }
 
-  function layout() {
-    const W = board.clientWidth;
-    if (!W) return;
-    const L = pickLayout(W);
-    const gap = L.gap;
-    const colW = (W - gap * (L.cols - 1)) / L.cols;
-    const heights = new Array(L.cols).fill(0);
-    const order = sortedItems();
+  /* 화면에 몇 개가 있느냐에 따라 캔버스를 채우는 정도를 조절 */
+  function fillRatio(n) {
+    if (n <= 1) return 0.13;
+    if (n === 2) return 0.21;
+    if (n <= 4) return 0.30;
+    if (n <= 7) return 0.38;
+    return 0.42;
+  }
 
-    order.forEach((item) => {
-      const el = nodes.get(item.id);
-      if (!el) return;
-      const level = levelOf(item.boost_count);
-      const span = clamp(L.spans[level - 1], 1, L.cols);
-      const w = span * colW + (span - 1) * gap;
-      const h = Math.round(w * ratioOf(span));
-
-      let bestStart = 0;
-      let bestTop = Infinity;
-      for (let j = 0; j + span <= L.cols; j++) {
-        let top = 0;
-        for (let k = 0; k < span; k++) top = Math.max(top, heights[j + k]);
-        if (top < bestTop - 0.5) { bestTop = top; bestStart = j; }
-      }
-      if (!isFinite(bestTop)) bestTop = 0;
-
-      const x = bestStart * (colW + gap);
-      el.style.width = w.toFixed(2) + 'px';
-      el.style.height = h + 'px';
-      el.style.transform = 'translate3d(' + x.toFixed(2) + 'px,' + bestTop.toFixed(2) + 'px,0)';
-      el.dataset.span = String(span);
-      el.dataset.level = String(level);
-      el.dataset.w = w.toFixed(1);
-
-      for (let k = 0; k < span; k++) heights[bestStart + k] = bestTop + h + gap;
+  /* 부스트 → 반지름. 화면 면적과 거품 개수로 한 번에 맞춰 계산합니다. */
+  function computeRadii(order) {
+    measureStage();
+    const n = order.length;
+    let wsum = 0;
+    order.forEach(function (it) {
+      const f = sizeFactor(it.boost_count);
+      wsum += f * f;
     });
+    const k = Math.sqrt((fillRatio(n) * W * H) / (Math.PI * Math.max(wsum, 1e-4)));
+    const maxR = Math.max(20, Math.min(W, H) * 0.40);
+    const minR = Math.max(15, Math.min(W, H) * 0.032);
 
-    const total = Math.max.apply(null, heights.concat([0])) - (order.length ? gap : 0);
-    board.style.height = Math.max(0, total) + 'px';
+    order.forEach(function (it) {
+      const b = bubbles.get(it.id);
+      if (!b) return;
+      const f = sizeFactor(it.boost_count);
+      b.target = clamp(k * f, minR, maxR);
+      if (!b.placed) { b.r = b.target; }
+      if (reduceMotion) { b.r = b.target; }
+    });
+  }
 
-    if (firstLayout && order.length) {
-      firstLayout = false;
-      // 첫 배치가 미끄러져 들어오지 않도록
-      $$('.tile', board).forEach((el) => el.classList.add('no-anim'));
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        $$('.tile', board).forEach((el) => el.classList.remove('no-anim'));
-      }));
+  function clampInside(b) {
+    const minX = b.r + PAD, maxX = W - b.r - PAD;
+    const minY = b.r + PAD, maxY = H - b.r - PAD;
+    b.x = minX > maxX ? W / 2 : clamp(b.x, minX, maxX);
+    b.y = minY > maxY ? H / 2 : clamp(b.y, minY, maxY);
+  }
+
+  /* 겹친 거품을 서로 밀어내기만 하는 반복(초기 배치/리사이즈용) */
+  function separate(list, iterations, strength) {
+    for (let it = 0; it < iterations; it++) {
+      for (let i = 0; i < list.length; i++) {
+        const a = list[i];
+        for (let j = i + 1; j < list.length; j++) {
+          const b = list[j];
+          let dx = b.x - a.x, dy = b.y - a.y;
+          let d = Math.hypot(dx, dy);
+          const min = a.r + b.r + 2;
+          if (d >= min) continue;
+          if (d < 0.001) { dx = 1; dy = 0; d = 1; }
+          const nx = dx / d, ny = dy / d;
+          const push = (min - d) * strength;
+          const ma = a.r * a.r, mb = b.r * b.r, tot = ma + mb;
+          a.x -= nx * push * (mb / tot); a.y -= ny * push * (mb / tot);
+          b.x += nx * push * (ma / tot); b.y += ny * push * (ma / tot);
+        }
+      }
+      list.forEach(clampInside);
     }
   }
-  const relayout = debounce(layout, 90);
+
+  /* 황금각 나선으로 캔버스 전체에 흩뿌리기 */
+  function spawnSpot(b, i, n) {
+    if (n <= 1) return { x: W / 2, y: H / 2 };      // 하나뿐이면 가운데에서
+    const g = Math.PI * (3 - Math.sqrt(5));
+    const t = Math.sqrt((i + 0.7) / Math.max(n, 1));
+    const ang = i * g + (hashStr(String(b.id)) % 628) / 100;
+    const spread = n <= 3 ? 0.6 : 1;                 // 몇 개 없을 때는 가운데로 모아
+    return {
+      x: W / 2 + Math.cos(ang) * t * W * 0.42 * spread,
+      y: H / 2 + Math.sin(ang) * t * H * 0.42 * spread
+    };
+  }
+
+  function reflect(b, nx, ny, jitter) {
+    const d = b.vx * nx + b.vy * ny;
+    if (d >= 0) return;
+    const vx = b.vx - 2 * d * nx;
+    const vy = b.vy - 2 * d * ny;
+    b.ang = Math.atan2(vy, vx) + jitter;
+  }
+
+  function walls(b) {
+    const minX = b.r + PAD, maxX = W - b.r - PAD;
+    const minY = b.r + PAD, maxY = H - b.r - PAD;
+    if (minX < maxX) {
+      if (b.x < minX) { b.x = minX; b.ang = Math.PI - b.ang; }
+      else if (b.x > maxX) { b.x = maxX; b.ang = Math.PI - b.ang; }
+    } else { b.x = W / 2; }
+    if (minY < maxY) {
+      if (b.y < minY) { b.y = minY; b.ang = -b.ang; }
+      else if (b.y > maxY) { b.y = maxY; b.ang = -b.ang; }
+    } else { b.y = H / 2; }
+  }
+
+  /* 크기: 부스트로 목표 반지름이 바뀌면 부드럽게 자라거나 줄어듭니다.
+     (모달이 열려 있어도 뒤에서 자라는 게 보이도록 물리와 분리) */
+  function stepSizes(dt, list) {
+    for (let i = 0; i < list.length; i++) {
+      const b = list[i];
+      if (b.r === b.target) continue;
+      const diff = b.target - b.r;
+      if (Math.abs(diff) < 0.08) b.r = b.target;
+      else b.r += diff * Math.min(1, dt * 6.5);
+    }
+  }
+
+  function stepMotion(dt, list) {
+    const t = performance.now() / 1000;
+
+    /* 아주 느긋한 표류: 방향이 조금씩 돌아가며 곡선으로 떠다님 */
+    for (let i = 0; i < list.length; i++) {
+      const b = list[i];
+      const calm = b.hover ? 0.24 : 1;
+      b.ang += b.spin * dt * calm;
+      const sp = b.speed * (1 + 0.14 * Math.sin(t * b.breath + b.phase)) * calm;
+      b.vx = Math.cos(b.ang) * sp;
+      b.vy = Math.sin(b.ang) * sp;
+      b.x += b.vx * dt;
+      b.y += b.vy * dt;
+    }
+
+    /* 서로 밀어내기 + 부드러운 반사 (거품이 겹쳐 쌓이지 않도록) */
+    for (let i = 0; i < list.length; i++) {
+      const a = list[i];
+      for (let j = i + 1; j < list.length; j++) {
+        const b = list[j];
+        let dx = b.x - a.x, dy = b.y - a.y;
+        let d = Math.hypot(dx, dy);
+        const min = a.r + b.r;
+        if (d >= min) continue;
+        if (d < 0.001) { dx = 1; dy = 0; d = 1; }
+        const nx = dx / d, ny = dy / d;
+        const overlap = min - d;
+        const ma = a.r * a.r, mb = b.r * b.r, tot = ma + mb;
+        a.x -= nx * overlap * (mb / tot); a.y -= ny * overlap * (mb / tot);
+        b.x += nx * overlap * (ma / tot); b.y += ny * overlap * (ma / tot);
+
+        const rel = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+        if (rel < 0) {
+          const jitter = (Math.random() - 0.5) * 0.2;
+          reflect(a, -nx, -ny, jitter);
+          reflect(b, nx, ny, jitter);
+        }
+      }
+    }
+
+    for (let i = 0; i < list.length; i++) walls(list[i]);
+  }
+
+  function paintBubble(b) {
+    const d = b.r * 2;
+    if (b.lastD === undefined || Math.abs(d - b.lastD) > 0.3) {
+      b.el.style.width = d.toFixed(1) + 'px';
+      b.el.style.height = d.toFixed(1) + 'px';
+      b.lastD = d;
+    }
+    const x = b.x - b.r, y = b.y - b.r;
+    if (b.lastX === undefined || Math.abs(x - b.lastX) > 0.08 || Math.abs(y - b.lastY) > 0.08) {
+      b.el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)';
+      b.lastX = x; b.lastY = y;
+    }
+  }
+
+  function loop(now) {
+    rafId = requestAnimationFrame(loop);
+    if (!lastT) { lastT = now; return; }
+    const dt = Math.min((now - lastT) / 1000, 0.05);
+    lastT = now;
+    if (dt <= 0) return;
+    const list = [];
+    bubbles.forEach(function (b) { list.push(b); });
+    if (!list.length) return;
+    stepSizes(dt, list);
+    if (!paused && !reduceMotion) stepMotion(dt, list);
+    for (let i = 0; i < list.length; i++) paintBubble(list[i]);
+  }
 
   /* ---------------- 5. 렌더링 ---------------- */
-  function tileFor(item) {
+  function bubbleFor(item) {
     const el = document.createElement('button');
     el.type = 'button';
-    el.className = 'tile no-anim';
+    el.className = 'bubble';
     el.dataset.id = item.id;
 
     const img = document.createElement('img');
@@ -837,69 +981,120 @@ const CONFIG = {
     chip.className = 'chip';
     chip.innerHTML = '<span class="fire" aria-hidden="true">🔥</span><b></b>';
 
-    const crown = document.createElement('span');
-    crown.className = 'crown';
-    crown.textContent = '1위';
-    crown.hidden = true;
-
-    const cap = document.createElement('span');
-    cap.className = 'cap';
-    const t = document.createElement('span');
-    t.className = 'cap-title';
-    const sub = document.createElement('span');
-    sub.className = 'cap-sub';
-    cap.appendChild(t); cap.appendChild(sub);
-
     el.appendChild(img);
     el.appendChild(chip);
-    el.appendChild(crown);
-    el.appendChild(cap);
-    el.addEventListener('click', () => openDetail(item.id));
     return el;
   }
 
-  function paintTile(el, item, rank) {
-    const img = el.querySelector('img');
+  function paintBubbleContent(b, item, rank) {
+    const img = b.el.querySelector('img');
     const want = imageSrc(item);
     if (img.getAttribute('src') !== want) img.src = want;
-    el.querySelector('.chip b').textContent = num(item.boost_count);
-    el.querySelector('.cap-title').textContent = item.title;
-    el.querySelector('.cap-sub').textContent = item.description || '';
-    const crown = el.querySelector('.crown');
-    crown.hidden = rank !== 1;
-    el.setAttribute('aria-label', item.title + ' · 부스트 ' + num(item.boost_count) + ' · 상세 보기');
+    b.el.querySelector('.chip b').textContent = num(item.boost_count);
+    b.el.dataset.level = String(levelOf(item.boost_count));
+    b.el.classList.toggle('top', rank === 1);
+    b.el.setAttribute('aria-label', item.title + ' · 부스트 ' + num(item.boost_count) + ' · 상세 보기');
   }
 
   function render() {
     const order = sortedItems();
-    const ids = new Set(order.map((i) => i.id));
+    const ids = new Set(order.map(function (i) { return i.id; }));
 
-    nodes.forEach((el, id) => {
-      if (!ids.has(id)) {
-        el.remove();
-        nodes.delete(id);
-      }
+    bubbles.forEach(function (b, id) {
+      if (!ids.has(id)) { b.el.remove(); bubbles.delete(id); }
     });
 
-    order.forEach((item, idx) => {
-      let el = nodes.get(item.id);
-      if (!el) {
-        el = tileFor(item);
-        nodes.set(item.id, el);
-        board.appendChild(el);
+    measureStage();
+    const fresh = [];
+
+    order.forEach(function (item, idx) {
+      let b = bubbles.get(item.id);
+      if (!b) {
+        const el = bubbleFor(item);
+        stage.appendChild(el);
+        const h = rng('bubble-' + item.id);
+        b = {
+          id: item.id, el: el, item: item,
+          r: 0, target: 0, lastD: undefined, lastX: undefined, lastY: undefined,
+          x: 0, y: 0, vx: 0, vy: 0,
+          ang: h() * Math.PI * 2,
+          spin: (h() > 0.5 ? 1 : -1) * (0.05 + h() * 0.14),
+          speed: 0,
+          breath: 0.35 + h() * 0.7,
+          phase: h() * Math.PI * 2,
+          hover: false,
+          placed: false
+        };
+        bubbles.set(item.id, b);
+        el.addEventListener('click', function () { openDetail(item.id); });
+        el.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') b.hover = true; });
+        el.addEventListener('pointerleave', function () { b.hover = false; });
+        el.addEventListener('focus', function () { b.hover = true; });
+        el.addEventListener('blur', function () { b.hover = false; });
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { el.classList.add('in'); });
+        });
+        fresh.push(b);
       }
-      paintTile(el, item, idx + 1);
+      b.item = item;
+      paintBubbleContent(b, item, idx + 1);
     });
+
+    computeRadii(order);
+
+    fresh.forEach(function (b) {
+      const i = order.findIndex(function (it) { return it.id === b.id; });
+      const spot = spawnSpot(b, i, order.length);
+      b.x = spot.x; b.y = spot.y;
+      clampInside(b);
+      b.placed = true;
+      if (!reduceMotion) { b.r = b.target * 0.55; }   // 살짝 작게 시작해 부풀어 오름
+    });
+
+    const list = [];
+    bubbles.forEach(function (b) { list.push(b); });
+    separate(list, reduceMotion ? 40 : 24, 0.95);
+
+    /* 화면이 클수록 조금 더 느긋하게 (너무 빠르면 어지러움) */
+    const baseSpeed = clamp(Math.min(W, H) * 0.018, 8.5, 20);
+    list.forEach(function (b) {
+      const h = rng('speed-' + b.id);
+      b.speed = baseSpeed * (0.65 + h() * 0.7);
+    });
+
+    list.forEach(paintBubble);
 
     $('#boardCount').textContent = order.length + '개';
     $('#empty').hidden = order.length > 0;
-    board.classList.toggle('is-empty', order.length === 0);
-    layout();
+    stage.classList.toggle('is-empty', order.length === 0);
+
+    lastT = 0;
+    if (!rafId) rafId = requestAnimationFrame(loop);
   }
 
-  function bumpTile(id) {
-    const el = nodes.get(id);
-    if (!el) return;
+  /* 모달이 열려 있는 동안은 물리 연산을 잠시 멈춥니다(발열/배터리) */
+  function setPaused(v) {
+    paused = !!v;
+    lastT = 0;
+  }
+
+  const relayout = debounce(function () {
+    const oldW = W, oldH = H;
+    measureStage();
+    if (oldW > 1 && oldH > 1 && (W !== oldW || H !== oldH)) {
+      const sx = W / oldW, sy = H / oldH;
+      bubbles.forEach(function (b) {
+        b.x *= sx; b.y *= sy;
+        b.lastX = undefined; b.lastY = undefined;
+      });
+    }
+    render();
+  }, 120);
+
+  function bumpBubble(id) {
+    const b = bubbles.get(id);
+    if (!b) return;
+    const el = b.el;
     el.classList.remove('bump');
     void el.offsetWidth;
     el.classList.add('bump');
@@ -907,7 +1102,7 @@ const CONFIG = {
     plus.className = 'plusone';
     plus.textContent = '+1';
     el.appendChild(plus);
-    setTimeout(() => plus.remove(), 1000);
+    setTimeout(function () { plus.remove(); }, 1050);
   }
 
   /* ---------------- 6. 모달 ---------------- */
@@ -918,6 +1113,7 @@ const CONFIG = {
     m.classList.add('open');
     m.setAttribute('aria-hidden', 'false');
     document.body.classList.add('lock');
+    setPaused(true);
     const focusable = m.querySelector('.x') || m.querySelector('button');
     if (focusable) setTimeout(() => focusable.focus({ preventScroll: true }), 60);
   }
@@ -926,7 +1122,7 @@ const CONFIG = {
     if (!m || !m.classList.contains('open')) return;
     m.classList.remove('open');
     m.setAttribute('aria-hidden', 'true');
-    if (!$('.modal.open')) document.body.classList.remove('lock');
+    if (!$('.modal.open')) { document.body.classList.remove('lock'); setPaused(false); }
     if (lastFocus && lastFocus.focus) { try { lastFocus.focus({ preventScroll: true }); } catch (e) {} }
   }
   function closeAll() {
@@ -1003,7 +1199,7 @@ const CONFIG = {
     if (st.tier === 'free') {
       label.textContent = '크게 키우기';
       cost.textContent = '무료 ' + st.left + '회';
-      fine.textContent = '부스트 1회마다 보드에서 한 단계 커져요';
+      fine.textContent = '부스트할수록 거품이 조금씩 커져요';
     } else if (st.tier === 'ad') {
       label.textContent = '크게 키우기';
       cost.textContent = '광고 ' + st.left + '/' + CONFIG.AD_LIMIT;
@@ -1024,7 +1220,7 @@ const CONFIG = {
     store.set(KEY_MINE, state.mine);
     if (state.mode === 'local') store.set(KEY_ITEMS, state.items);
 
-    bumpTile(id);
+    bumpBubble(id);
     render();
     if (state.currentId === id) {
       const cur = getItem(id);
@@ -1310,7 +1506,7 @@ const CONFIG = {
       render();
       closeModal('#upModal');
       toast('보드에 올렸어요');
-      setTimeout(() => { const el = nodes.get(item.id); if (el) el.classList.add('bump'); }, 80);
+      setTimeout(() => bumpBubble(item.id), 80);
     } catch (err) {
       console.error(err);
       showUpErr('올리지 못했어요. 잠시 후 다시 시도해 주세요.');
@@ -1547,11 +1743,12 @@ const CONFIG = {
     state: state,
     config: CONFIG,
     sorted: sortedItems,
-    layout: layout,
+    render: render,
+    bubbles: bubbles,
+    stage: function () { return { w: W, h: H }; },
     openItem: openDetail,
     boost: applyBoost,
     boostState: boostState,
-    render: render,
     client: function () { return sb; }
   };
 
