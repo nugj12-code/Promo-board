@@ -78,6 +78,17 @@ button{font-family:inherit}
 .mode-badge[data-mode="cloud"]{color:var(--ink);background:#fff;border-color:var(--line-strong)}
 .mode-badge[data-mode="cloud"] .dot{background:var(--ink);border-color:var(--ink)}
 .mode-badge[hidden]{display:none}
+/* 관리자(사이트 주인) 모드 표시 — 누르면 바로 끔 */
+.admin-badge{
+  appearance:none;display:inline-flex;align-items:center;gap:5px;
+  font-size:10.5px;line-height:1.2;font-weight:800;letter-spacing:-.01em;
+  color:#fff;background:var(--ink);border:1px solid var(--ink);
+  padding:6px 10px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  transition:.18s var(--ease);
+}
+.admin-badge::before{content:"";width:5px;height:5px;border-radius:50%;background:#fff;opacity:.9;flex:none}
+.admin-badge:hover{background:#2a2a2e;border-color:#2a2a2e}
+.admin-badge[hidden]{display:none}
 .count{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:0;white-space:nowrap}
 
 /* DB 초기화 대기 안내 */
@@ -240,6 +251,13 @@ button{font-family:inherit}
 }
 .dlink:hover{border-bottom-color:var(--ink)}
 .dlink[hidden]{display:none}
+/* 관리자 삭제 — 상세 모달 맨 아래, 두 번 눌러야 지워집니다 */
+.adminrow{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.adminrow[hidden]{display:none}
+.btn.danger{background:#fff;color:#c0271f;border:1px solid #f1c9c5;box-shadow:none}
+.btn.danger:hover{background:#fdf3f2;color:#a82019;border-color:#e7b3ad;opacity:1}
+.btn.danger.armed{background:#c0271f;color:#fff;border-color:#c0271f}
+.adminrow .fine{margin-top:9px}
 .tiers{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 12px}
 .tier{
   font-size:11px;font-weight:650;padding:7px 10px;border-radius:999px;
@@ -375,6 +393,7 @@ button{font-family:inherit}
   <header class="top" id="top">
     <div class="top-right">
       <span class="mode-badge" id="modeBadge" hidden><i class="dot"></i><span id="modeText"></span></span>
+      <button class="admin-badge" id="adminBadge" type="button" hidden title="누르면 관리자 모드를 끕니다" aria-label="관리자 모드 끄기">관리자</button>
       <span class="count" id="boardCount">0개</span>
     </div>
   </header>
@@ -436,6 +455,12 @@ button{font-family:inherit}
         <span class="cost" id="dCoCost">(무료 5회 남음)</span>
       </button>
       <p class="fine" id="dCoFine" hidden>같이 홍보하기 5회까지는 무료 · 그 다음부터는 짧은 광고를 봐요</p>
+
+      <!-- 사이트 주인(관리자) 모드에서만 보입니다 -->
+      <div class="adminrow" id="dAdminRow" hidden>
+        <button class="btn danger" id="dDeleteBtn" type="button">🗑️ 삭제하기 (관리자)</button>
+        <p class="fine">지운 홍보는 되돌릴 수 없어요</p>
+      </div>
     </div>
   </div>
 </div>
@@ -535,6 +560,26 @@ button{font-family:inherit}
       <p class="err" id="upErr" hidden></p>
       <button class="btn" id="upSubmit" type="button">보드에 올리기</button>
       <p class="fine" id="upFine">올린 홍보는 부스트 1회에서 시작해요</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 관리자 모드 (사이트 주인 전용) ============ -->
+<div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-labelledby="adminTitle" aria-hidden="true">
+  <div class="sheet" role="document">
+    <button class="x" type="button" data-close aria-label="닫기">✕</button>
+    <div class="sheet-head">
+      <h2 id="adminTitle">관리자 모드</h2>
+      <p>사이트 주인만 쓰는 삭제 모드예요. 관리자 비밀번호를 넣어 주세요.</p>
+    </div>
+    <div class="sheet-body">
+      <div class="field">
+        <span class="lb">관리자 비밀번호</span>
+        <input id="adminPin" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" />
+      </div>
+      <p class="err" id="adminErr" hidden></p>
+      <button class="btn" id="adminGo" type="button">관리자 모드 켜기</button>
+      <p class="fine">비밀번호는 이 탭에만 잠깐 기억되고, 맞는지는 Supabase 함수가 확인해요.</p>
     </div>
   </div>
 </div>
@@ -756,6 +801,8 @@ const CONFIG = {
     adMode: 'boost',    // 'boost' | 'coboost'
     currentId: null,    // 상세 모달 대상
     pendingItem: null,  // 광고/결제 대상
+    admin: false,       // 사이트 주인 관리자 모드가 켜졌는지
+    adminPin: '',       // 관리자 비밀번호 — sessionStorage(이 탭)에만, 검증은 서버 RPC
     loading: false
   };
   let sb = null;
@@ -1192,6 +1239,193 @@ const CONFIG = {
     if (e.key === 'Escape') closeAll();
   });
 
+  /* ---------------- 6-b. 관리자 모드 (사이트 주인 전용) ----------------
+     - 켜는 법  ① 주소에 ?admin=1 (또는 ?admin)  ② 오른쪽 위 상태를 2초 안에 6번 탭
+     - 비밀번호는 sessionStorage(이 탭)에만 두고, 맞는지는 서버 RPC
+       admin_delete_promo 가 판단합니다. index.html 안에는 어떤 비밀번호도 없습니다.
+     - 켠 동안에만 상세 모달 맨 아래에 빨간 삭제 버튼이 나옵니다.
+     ------------------------------------------------------------------ */
+  const KEY_ADMIN_PIN = 'promo_board_admin_pin';
+  const ADMIN_TAP_COUNT = 5;
+  const ADMIN_TAP_MS = 2000;
+  let adminTaps = [];
+  let deleteArmed = false;
+  let deleteTimer = 0;
+  let deleteBusy = false;
+
+  function sessionGet(k) { try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; } }
+  function sessionSet(k, v) {
+    try { if (v) sessionStorage.setItem(k, v); else sessionStorage.removeItem(k); } catch (e) {}
+  }
+
+  function syncAdminRow() {
+    const row = $('#dAdminRow');
+    if (row) row.hidden = !state.admin;
+  }
+
+  function setAdmin(on, pin) {
+    state.admin = !!on;
+    state.adminPin = on ? String(pin || '') : '';
+    sessionSet(KEY_ADMIN_PIN, state.adminPin);
+    const badge = $('#adminBadge');
+    if (badge) badge.hidden = !state.admin;
+    if (!state.admin) disarmDelete();
+    syncAdminRow();
+  }
+
+  function openAdminGate(msg) {
+    if (state.admin) { toast('관리자 모드가 이미 켜져 있어요'); return; }
+    const err = $('#adminErr');
+    err.textContent = msg || '';
+    err.hidden = !msg;
+    const input = $('#adminPin');
+    input.value = '';
+    openModal('#adminModal');
+    setTimeout(function () { try { input.focus({ preventScroll: true }); } catch (e) {} }, 140);
+  }
+
+  function submitAdminPin() {
+    const input = $('#adminPin');
+    const pin = String(input.value || '').trim();
+    if (!pin) {
+      const err = $('#adminErr');
+      err.textContent = '관리자 비밀번호를 입력해 주세요';
+      err.hidden = false;
+      try { input.focus({ preventScroll: true }); } catch (e) {}
+      return;
+    }
+    closeModal('#adminModal');
+    input.value = '';
+    setAdmin(true, pin);
+    toast('관리자 모드예요 · 거품을 눌러 삭제할 수 있어요');
+    if (state.currentId) refreshDetailTier();
+  }
+
+  $('#adminGo').addEventListener('click', submitAdminPin);
+  $('#adminPin').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); submitAdminPin(); }
+  });
+
+  /* 켜진 관리자 배지를 누르면 바로 꺼집니다 */
+  $('#adminBadge').addEventListener('click', function () {
+    if (!state.admin) return;
+    setAdmin(false, '');
+    toast('관리자 모드를 껐어요');
+  });
+
+  /* 오른쪽 위 상태(배지·개수)를 2초 안에 5번 누르면 관리자 비밀번호 창 */
+  $('#top').addEventListener('click', function (e) {
+    const t = e.target;
+    if (!t || !t.closest || !t.closest('.top-right')) return;
+    if (t.closest('#adminBadge')) return;
+    if (state.admin) return;
+    const now = Date.now();
+    adminTaps = adminTaps.filter(function (t0) { return now - t0 < ADMIN_TAP_MS; });
+    adminTaps.push(now);
+    if (adminTaps.length >= ADMIN_TAP_COUNT) {
+      adminTaps = [];
+      openAdminGate();
+    }
+  });
+
+  /* --- 삭제 버튼: 한 번 더 눌러야 지워지는 2단계 확인 --- */
+  function disarmDelete() {
+    deleteArmed = false;
+    clearTimeout(deleteTimer);
+    const btn = $('#dDeleteBtn');
+    if (!btn) return;
+    btn.classList.remove('armed');
+    btn.textContent = '🗑️ 삭제하기 (관리자)';
+    btn.disabled = false;
+  }
+  function armDelete() {
+    const btn = $('#dDeleteBtn');
+    deleteArmed = true;
+    btn.classList.add('armed');
+    btn.textContent = '한 번 더 누르면 삭제돼요';
+    clearTimeout(deleteTimer);
+    deleteTimer = setTimeout(disarmDelete, 4000);
+  }
+
+  $('#dDeleteBtn').addEventListener('click', function () {
+    if (!state.admin || deleteBusy) return;
+    const item = getItem(state.currentId);
+    if (!item) return;
+    if (!deleteArmed) { armDelete(); return; }
+    adminDelete(item);
+  });
+
+  function isInvalidPinError(err) {
+    if (!err) return false;
+    const all = [err.message, err.details, err.hint, err.code].join(' ');
+    return /invalid_admin_pin/i.test(all) || String(err.code) === '28000' ||
+      err.status === 401 || err.status === 403 || err.status === 400;
+  }
+  function isMissingAdminRpc(err) {
+    if (!err) return false;
+    const all = [err.message, err.details, err.code].join(' ');
+    if (/invalid_admin_pin|22023|28000/.test(all)) return false;
+    return /PGRST202|could not find the function|schema cache|does not exist|not found/i.test(all);
+  }
+
+  /* 삭제된 카드를 화면에서 바로 지웁니다(내 탭 + 다른 탭 공통) */
+  function removeDeletedItem(id, localOnly, opts) {
+    const quiet = !!(opts && opts.quiet);
+    const wasOpen = state.currentId === id;
+    state.items = state.items.filter(function (i) { return i.id !== id; });
+    if (localOnly) store.set(KEY_ITEMS, state.items);
+    if (wasOpen) {
+      state.currentId = null;
+      closeModal('#detailModal');
+    }
+    disarmDelete();
+    render();
+    if (quiet) {
+      if (wasOpen) toast('이 홍보는 내려갔어요');
+      return;
+    }
+    toast(localOnly ? '삭제했어요 · 이 브라우저에서만' : '삭제했어요');
+  }
+
+  function handleDeleteError(err) {
+    disarmDelete();
+    if (isMissingAdminRpc(err)) {
+      toast('관리자 삭제 함수가 아직 없어요 · Supabase에서 SQL을 실행해 주세요');
+      return;
+    }
+    if (isInvalidPinError(err)) {
+      setAdmin(false, '');                    // 서버가 거절한 비밀번호는 바로 지웁니다
+      toast('관리자 비밀번호가 맞지 않아요');
+      openAdminGate('관리자 비밀번호가 맞지 않아요');
+      return;
+    }
+    toast('삭제하지 못했어요 · 잠시 후 다시');
+  }
+
+  async function adminDelete(item) {
+    if (deleteBusy || !item) return;
+    const pin = state.adminPin;
+    if (!pin) { openAdminGate(); return; }
+
+    /* 로컬 체험 모드(?local=1)에는 서버가 없으니 이 브라우저에서만 지웁니다 */
+    if (state.mode !== 'cloud' || !sb) { removeDeletedItem(item.id, true); return; }
+
+    const btn = $('#dDeleteBtn');
+    deleteBusy = true;
+    btn.disabled = true;
+    btn.textContent = '삭제하는 중…';
+    try {
+      const res = await sb.rpc('admin_delete_promo', { p_id: item.id, p_pin: pin });
+      if (res && res.error) { handleDeleteError(res.error); return; }
+      removeDeletedItem(item.id, false);
+    } catch (err) {
+      handleDeleteError(err);
+    } finally {
+      deleteBusy = false;
+      disarmDelete();
+    }
+  }
+
   /* ---------------- 7. 부스트 3단계 ---------------- */
   function boostState(item) {
     const mine = state.mine[item.id] || 0;
@@ -1208,6 +1442,7 @@ const CONFIG = {
     const item = getItem(id);
     if (!item) return;
     state.currentId = id;
+    disarmDelete();               // 다른 거품을 열면 삭제 확인 단계는 초기화
     const order = sortedItems();
     const rank = order.findIndex((i) => i.id === id) + 1;
 
@@ -1245,6 +1480,7 @@ const CONFIG = {
     fine.hidden = !owned;
     coBtn.hidden = owned;
     coFine.hidden = owned;
+    syncAdminRow();               // 관리자 모드에서만 삭제 버튼
 
     if (!owned) {
       const left = coboostLeft();
@@ -1763,8 +1999,9 @@ const CONFIG = {
             }
           }
         } else if (type === 'DELETE') {
+          /* 다른 탭·다른 사람이 지운 카드는 여기서도 바로 사라집니다 (replica identity full) */
           const id = payload.old && payload.old.id;
-          if (id) { state.items = state.items.filter((i) => i.id !== id); render(); }
+          if (id && getItem(id)) removeDeletedItem(id, false, { quiet: true });
         }
       })
       .subscribe();
@@ -1822,10 +2059,15 @@ const CONFIG = {
     }
     // 로컬 미리보기: ?local=1 (Supabase에 붙지 않고 이 브라우저에서만)
     const forceLocal = /[?&]local=1/.test(qs);
+    const adminWanted = /(^|[?&])admin(=1)?(&|$)/.test(qs);
     const cloudConfigured = !isPlaceholder(CONFIG.SUPABASE_URL) && !isPlaceholder(CONFIG.SUPABASE_ANON_KEY);
     state.mine = store.get(KEY_MINE, {}) || {};
     state.owned = loadOwned();
     state.coboUsed = loadCoboost();
+
+    // 같은 탭에서 이미 인증한 관리자 모드는 새로고침해도 이어집니다(sessionStorage).
+    state.adminPin = sessionGet(KEY_ADMIN_PIN);
+    if (state.adminPin) setAdmin(true, state.adminPin);
 
     if (cloudConfigured && !forceLocal) {
       try {
@@ -1852,6 +2094,21 @@ const CONFIG = {
     const b = $('#boot');
     b.classList.add('gone');
     setTimeout(() => b.remove(), 400);
+
+    /* ?admin=1 / ?admin 으로 열면 관리자 비밀번호 창을 띄웁니다.
+       주소창에서는 파라미터를 지워 새로고침·공유로 남지 않게 합니다. */
+    if (adminWanted) {
+      try {
+        const params = new URLSearchParams(qs);
+        params.delete('admin');
+        const rest = params.toString();
+        history.replaceState(null, '', location.pathname + (rest ? '?' + rest : '') + location.hash);
+      } catch (e) {}
+      setTimeout(function () {
+        if (state.admin) toast('관리자 모드예요 · 거품을 눌러 삭제할 수 있어요');
+        else openAdminGate();
+      }, 260);
+    }
   }
 
   window.addEventListener('resize', relayout);
@@ -1886,7 +2143,12 @@ const CONFIG = {
     owned: function () { return state.owned.slice(); },
     coboUsed: function () { return state.coboUsed; },
     coboLeft: coboostLeft,
-    client: function () { return sb; }
+    client: function () { return sb; },
+    admin: function () { return { active: state.admin, hasPin: !!state.adminPin }; },
+    openAdmin: openAdminGate,
+    setAdmin: setAdmin,
+    deleteCurrent: adminDelete,
+    adminPinInput: function () { return $('#adminPin'); }
   };
 
   boot();

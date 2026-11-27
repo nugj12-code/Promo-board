@@ -88,7 +88,8 @@ revoke all on function public.increment_boost(uuid, integer) from public;
 grant execute on function public.increment_boost(uuid, integer) to anon, authenticated;
 
 -- ---------------------------------------------------------------------
--- 4. Realtime — 새 카드/부스트가 모든 접속자 화면에 즉시 반영
+-- 4. Realtime — 새 카드/부스트/삭제가 모든 접속자 화면에 즉시 반영
+--    replica identity full: DELETE 이벤트에도 old.id 가 실려 옆 탭에서 거품이 바로 사라집니다.
 -- ---------------------------------------------------------------------
 alter table public.promo_items replica identity full;
 
@@ -102,6 +103,41 @@ begin
   end;
 end;
 $$;
+
+-- ---------------------------------------------------------------------
+-- 4-b. 사이트 주인 전용 관리자 삭제 RPC
+--    - 비밀번호는 여기(서버)에만 있습니다. index.html 에는 절대 쓰지 마세요.
+--    - 아래 'CHANGE_ME_PIN' 을 원하는 비밀번호로 바꾼 뒤 이 블록 전체를 실행하세요.
+--      (영문·숫자 섞은 12자 이상을 권합니다. 페이지 소스에는 남지 않습니다.)
+--    - security definer + delete 정책 없음 → 이 함수를 통해서만 카드를 지울 수 있습니다.
+-- ---------------------------------------------------------------------
+create or replace function public.admin_delete_promo(p_id uuid, p_pin text)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  removed integer;
+begin
+  -- 서버에서만 확인하는 관리자 비밀번호
+  if coalesce(p_pin, '') <> 'CHANGE_ME_PIN' then
+    raise exception 'invalid_admin_pin' using errcode = '28000';
+  end if;
+
+  if p_id is null then
+    return false;
+  end if;
+
+  delete from public.promo_items where id = p_id;
+  get diagnostics removed = row_count;
+
+  return removed > 0;   -- 없던 카드면 false
+end;
+$$;
+
+revoke all on function public.admin_delete_promo(uuid, text) from public;
+grant execute on function public.admin_delete_promo(uuid, text) to anon, authenticated;
 
 -- ---------------------------------------------------------------------
 -- 5. Storage — 이미지 버킷 'board-images' (공개 읽기 / 누구나 업로드)
@@ -129,4 +165,6 @@ create policy "board-images upload"
 -- ---------------------------------------------------------------------
 select
   (select count(*) from public.promo_items)                       as promo_items_count,
-  (select count(*) from storage.buckets where id = 'board-images') as bucket_ok;
+  (select count(*) from storage.buckets where id = 'board-images') as bucket_ok,
+  (select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public' and p.proname = 'admin_delete_promo') as admin_rpc_ok;

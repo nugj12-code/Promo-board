@@ -83,6 +83,23 @@
 Supabase `promo_items` 테이블의 변경(INSERT/UPDATE/DELETE)을 Realtime으로 구독합니다.
 누군가 카드를 올리거나 부스트하면 접속 중인 모든 화면의 거품 크기가 즉시 바뀝니다.
 
+### 사이트 주인 전용 관리자 삭제 모드
+
+보드에는 아무 표시도 없고, 주인만 아는 방법으로만 열립니다.
+
+| 단계 | 방법 |
+| --- | --- |
+| **들어가기** | 주소에 `?admin=1`(또는 `?admin`)을 붙여 열기, **또는** 오른쪽 위 상태(배지·개수)를 **2초 안에 5번** 탭 |
+| **비밀번호** | `관리자 모드` 창에 관리자 비밀번호 입력 → 오른쪽 위에 검은 **`관리자`** 배지가 생김 (탭하면 바로 끔) |
+| **삭제** | 거품을 눌러 상세 모달을 열면 맨 아래에 빨간 **`🗑️ 삭제하기 (관리자)`** → 한 번 더 눌러야 실제로 지워짐 |
+
+- 비밀번호는 **`index.html` 안에 없습니다.** Supabase 함수 `admin_delete_promo(p_id, p_pin)` 안에서만 비교합니다(`security definer`).
+  그래서 페이지 소스를 봐도, 브라우저 저장소를 봐도 서버 비밀번호는 알 수 없습니다.
+- 입력한 비밀번호는 `sessionStorage`(`promo_board_admin_pin`)에만 두고, **이 탭에서만** 유지됩니다(새로고침해도 유지, 탭을 닫으면 사라짐).
+- 비밀번호가 틀리면 서버가 `invalid_admin_pin` 을 돌려주고, 화면은 **`관리자 비밀번호가 맞지 않아요`** 토스트와 함께 저장된 비밀번호를 지우고 다시 묻습니다.
+- 삭제에 성공하면 이 화면에서 거품이 **즉시** 사라지고 `삭제했어요` 토스트가 뜨며, 열려 있던 다른 탭도 Realtime `DELETE` 로 같이 사라집니다.
+- `promo_items` 에는 `delete` 정책이 없습니다. 즉 **관리자 함수로만** 카드를 지울 수 있습니다.
+
 ---
 
 ## 2. 처음 한 번만 하면 되는 설정
@@ -123,6 +140,16 @@ const CONFIG = {
 2. **Build and deployment → Source**: `Deploy from a branch`
 3. **Branch**: `main` / 폴더 `/(root)` → **Save**
 4. 1–2분 뒤 <https://nugj12-code.github.io/Promo-board/> 가 열립니다.
+
+### ④ 관리자 비밀번호 정하기 (삭제 모드를 쓸 때)
+
+`supabase_schema.sql` 의 `4-b` 블록 안 `'CHANGE_ME_PIN'` 을 **원하는 비밀번호로 바꾼 뒤** SQL Editor 에서 그 블록만 다시 실행하세요.
+영문·숫자를 섞은 12자 이상을 권합니다. 비밀번호는 DB 안에만 있고 페이지 소스에는 남지 않습니다.
+
+```sql
+-- supabase_schema.sql 4-b 안에서 이 줄만 고치면 됩니다
+if coalesce(p_pin, '') <> '내가_정한_비밀번호' then
+```
 
 ---
 
@@ -174,6 +201,7 @@ README.md             이 문서
 | `isOwned()` / `markOwned()` | 이 브라우저에서 올린 홍보인지 판단 (`promo_board_owned_ids`) |
 | `coBoostNow()` | 남의 홍보에 같이 홍보하기 (+1, `promo_board_cobooost_v1` 기록) |
 | `applyBoost()` | 화면 반영 + `increment_boost` RPC 호출 |
+| `setAdmin()` / `adminDelete()` | 사이트 주인 관리자 모드 켜고 끄기 · `admin_delete_promo` RPC 로 삭제 |
 | `connectCloud()` | Supabase 조회·구독, 테이블 없을 때 대기 처리 |
 
 ---
@@ -193,6 +221,8 @@ promo_items
 
 - **RLS**: 누구나 `select`, 누구나 `insert` (단, `boost_count = 1` 로만 생성 가능 → 부스트 수 조작 방지)
 - **RPC**: `increment_boost(item_id uuid, amount integer default 1)` — `security definer`, `amount` 는 1만 허용, 반환값은 새 `boost_count`
+- **RPC(관리자)**: `admin_delete_promo(p_id uuid, p_pin text) returns boolean` — `security definer`,
+  함수 안에서 관리자 비밀번호를 확인한 뒤 그 카드를 지웁니다(없던 카드면 `false`). `anon, authenticated` 에 실행 권한만 있음
 - **Realtime**: `promo_items` 의 INSERT/UPDATE/DELETE 를 구독
 - **Storage**: `board-images` 버킷 (공개 읽기, 누구나 업로드, 5MB, jpg/png/webp/gif)
 
@@ -227,12 +257,26 @@ open "index.html?reset=1"
 - **이미지 검수**: 누구나 업로드할 수 있으므로 공개 게시 전 검수나 신고 기능을 두는 것을 권합니다.
   (Storage 정책에 `image/*` MIME 제한은 이미 걸려 있습니다.)
 - **용량**: Supabase 무료 플랜은 Storage 1GB · DB 500MB 입니다. 업로드 이미지는 브라우저에서 최대 1600px 로 줄여 올립니다.
-- **삭제**: 지금은 삭제 UI가 없습니다. 필요하면 `promo_items` 에 `delete` 정책과 카드 메뉴를 추가하세요.
-  (익명 사용자끼리 남의 카드를 지우지 못하도록 소유자 개념이 먼저 필요합니다.)
+- **삭제**: 공개 삭제는 없고, 사이트 주인 전용 **관리자 삭제 모드**만 있습니다(`admin_delete_promo` RPC).
+  관리자 비밀번호를 아는 사람은 누구나 지울 수 있으니 길고 추측하기 어려운 값으로 두고, 필요한 때만 `4-b` 블록을 다시 실행해 바꾸세요.
+  더 단단히 막으려면 이 함수를 Supabase Auth 의 관리자 계정으로 제한하거나(`auth.uid()` 확인), 시도 횟수 제한을 두는 것을 권합니다.
 
 ---
 
 ## 8. 검증 기록
+
+**관리자 삭제 모드** (2026-11-27, 헤드리스 Chrome — 390×844 모바일 / 1440×900 데스크톱, 라이브 Supabase 연결 상태)
+
+- 일반 방문자: 관리자 배지·삭제 버튼 `hidden` · 상세 모달에 주인/같이 홍보 버튼만 · 콘솔 에러 0 · 4xx/5xx 0
+- `?admin=1` 로 열면 비밀번호 창이 뜨고, 주소창의 `admin` 파라미터는 자동으로 정리됨
+- 비밀번호 입력 → `관리자` 배지 표시 · `sessionStorage` 에만 저장 · 새로고침해도 이 탭에서는 유지
+- 상세 모달에 빨간 `🗑️ 삭제하기 (관리자)` (색 `#c0271f`) · 첫 탭에서 `한 번 더 누르면 삭제돼요` 로 바뀌고 삭제되지 않음 · 4초 뒤 원래대로
+- RPC 성공(모의): `admin_delete_promo({p_id, p_pin})` 호출 · 거품이 즉시 사라짐 · 상세 모달 닫힘 · `삭제했어요` · 개수 -1
+- RPC `invalid_admin_pin`(모의): `관리자 비밀번호가 맞지 않아요` 토스트 · 저장된 비밀번호 삭제 · 관리자 모드 꺼짐 · 비밀번호 창에 같은 안내 표시 · 다시 맞는 번호로 바로 재진입
+- RPC 없음(PGRST202, SQL 미실행): `관리자 삭제 함수가 아직 없어요 · Supabase에서 SQL을 실행해 주세요` · 카드 유지
+- 상태(배지·개수) 5번 탭 → 비밀번호 창 (4번은 열리지 않음) · `관리자` 배지 탭 → 즉시 종료 + `sessionStorage` 비움
+- Realtime `DELETE` 수신: 다른 탭이 지운 카드가 거품·상세 모달에서 바로 사라짐(`이 홍보는 내려갔어요`)
+- 두 화면 크기 모두 가로 스크롤 0 · 모달이 화면 안에 들어옴
 
 **투명 거품 · 홍보하기 · 같이 홍보하기 개편** (2026-11-27, 헤드리스 Chrome — 390×844 모바일 / 1440×900 데스크톱)
 
