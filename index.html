@@ -258,13 +258,6 @@ button{font-family:inherit}
 .btn.danger:hover{background:#fdf3f2;color:#a82019;border-color:#e7b3ad;opacity:1}
 .btn.danger.armed{background:#c0271f;color:#fff;border-color:#c0271f}
 .adminrow .fine{margin-top:9px}
-.tiers{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 12px}
-.tier{
-  font-size:11px;font-weight:650;padding:7px 10px;border-radius:999px;
-  border:1px solid var(--line);background:#fafafa;color:var(--muted);white-space:nowrap;
-  font-variant-numeric:tabular-nums;transition:.2s var(--ease);
-}
-.tier[data-active="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
 .btn{
   appearance:none;border:0;width:100%;padding:16px;border-radius:16px;cursor:pointer;
   font-size:15px;font-weight:750;letter-spacing:-.025em;
@@ -274,45 +267,12 @@ button{font-family:inherit}
 .btn:hover{opacity:.9}
 .btn:active{transform:scale(.988)}
 .btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
-.btn .cost{
-  font-size:11.5px;font-weight:750;letter-spacing:-.01em;padding:5px 10px;border-radius:999px;
-  background:rgba(255,255,255,.16);color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;
-}
 .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line-strong)}
 .btn.ghost:hover{background:var(--soft);opacity:1}
 .btn.small{padding:12px;font-size:13.5px;border-radius:13px}
 .fine{margin:10px 0 0;font-size:11px;color:var(--muted);text-align:center;line-height:1.5}
 .goal{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--muted);margin:0 0 6px;font-variant-numeric:tabular-nums}
 .goal .now{color:var(--ink);font-weight:750}
-
-/* 광고/결제 모달 */
-.adbox{
-  position:relative;margin:0 0 14px;border-radius:16px;overflow:hidden;
-  border:1px solid var(--line);background:
-    repeating-linear-gradient(135deg,#fafafa 0 10px,#f4f4f5 10px 20px);
-  aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-  color:var(--muted);font-size:11.5px;text-align:center;padding:12px;
-}
-.adbox .adlabel{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#b4b4ba}
-.adbox .big{font-size:14px;font-weight:750;color:var(--ink);letter-spacing:-.03em}
-.adprogress{height:5px;border-radius:999px;background:var(--line);overflow:hidden;margin:0 0 8px}
-.adprogress i{display:block;height:100%;width:0;background:var(--ink);border-radius:999px;transition:width .25s linear}
-.adtimer{text-align:center;font-size:12px;color:var(--muted);margin:0 0 14px;font-variant-numeric:tabular-nums}
-.adtimer b{color:var(--ink);font-weight:800}
-.priceline{
-  display:flex;align-items:baseline;justify-content:space-between;
-  padding:15px 16px;border:1px solid var(--line);border-radius:16px;background:var(--soft);margin:0 0 12px;
-}
-.priceline .lb{font-size:12px;color:var(--muted)}
-.priceline .amt{font-size:22px;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.testbadge{
-  display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#6f6f75;
-  background:#fff;border:1px solid var(--line-strong);border-radius:999px;padding:4px 9px;margin:0 0 12px;
-}
-.kv{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;padding:9px 0;border-bottom:1px dashed var(--line)}
-.kv:last-of-type{border-bottom:0}
-.kv .k{color:var(--muted)}
-.kv .v{font-weight:700;max-width:60%;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* 업로드 모달 */
 .drop{
@@ -436,80 +396,23 @@ button{font-family:inherit}
 
       <a class="dlink" id="dLink" href="#" target="_blank" rel="noopener noreferrer">링크 열기 ↗</a>
 
-      <div class="tiers" id="dTiers">
-        <span class="tier" data-tier="free">남은 무료 부스트 10/10</span>
-        <span class="tier" data-tier="ad">광고 보고 키우기 10/10</span>
-        <span class="tier" data-tier="paid">₩500/회</span>
-      </div>
-
-      <!-- 내 홍보: 주인만 키우기 -->
+      <!-- 내 홍보: 주인만 키우기 — 누르면 바로 부스트 +1 -->
       <button class="btn" id="dBoostBtn" type="button">
         <span aria-hidden="true">🔥</span><span id="dBoostLabel">내 홍보 키우기</span>
-        <span class="cost" id="dBoostCost">무료 10회</span>
       </button>
       <p class="fine" id="dFine">부스트할수록 거품이 조금씩 커져요</p>
 
-      <!-- 다른 사람 홍보: 같이 홍보하기 (5회 무료 → 광고) -->
+      <!-- 다른 사람 홍보: 같이 홍보하기 — 누르면 바로 부스트 +1 -->
       <button class="btn" id="dCoBtn" type="button" hidden>
         <span aria-hidden="true">🤝</span><span id="dCoLabel">같이 홍보하기</span>
-        <span class="cost" id="dCoCost">(무료 5회 남음)</span>
       </button>
-      <p class="fine" id="dCoFine" hidden>같이 홍보하기 5회까지는 무료 · 그 다음부터는 짧은 광고를 봐요</p>
+      <p class="fine" id="dCoFine" hidden>같이 홍보하면 이 거품이 조금씩 커져요</p>
 
       <!-- 사이트 주인(관리자) 모드에서만 보입니다 -->
       <div class="adminrow" id="dAdminRow" hidden>
         <button class="btn danger" id="dDeleteBtn" type="button">🗑️ 삭제하기 (관리자)</button>
         <p class="fine">지운 홍보는 되돌릴 수 없어요</p>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ============ 광고 모달 (2단계) ============ -->
-<div class="modal" id="adModal" role="dialog" aria-modal="true" aria-labelledby="adTitle" aria-hidden="true">
-  <div class="sheet" role="document">
-    <button class="x" type="button" data-close aria-label="닫기">✕</button>
-    <div class="sheet-head">
-      <h2 id="adTitle">광고 보고 키우기</h2>
-      <p id="adSub">짧은 광고를 끝까지 보면 부스트 1회를 드려요.</p>
-    </div>
-    <div class="sheet-body">
-      <!-- TODO: AdSense / Rewarded Ad SDK hook — 실제 광고 슬롯을 이 박스에 마운트하고,
-           광고 로드 실패·스킵 시 아래 finishAd()를 호출하지 않도록 처리하세요. -->
-      <div class="adbox" id="adBox">
-        <span class="adlabel">advertisement</span>
-        <span class="big" id="adBig">광고 영역</span>
-        <span>AdSense · Rewarded Ad SDK 연결 지점</span>
-      </div>
-      <div class="adprogress"><i id="adBar"></i></div>
-      <p class="adtimer" id="adTimer"><b>5</b>초 후 부스트를 받을 수 있어요</p>
-      <button class="btn" id="adGet" type="button" disabled>부스트 받기</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============ 결제 모달 (3단계) ============ -->
-<div class="modal" id="payModal" role="dialog" aria-modal="true" aria-labelledby="payTitle" aria-hidden="true">
-  <div class="sheet" role="document">
-    <button class="x" type="button" data-close aria-label="닫기">✕</button>
-    <div class="sheet-head">
-      <h2 id="payTitle">부스트 구매</h2>
-      <p>무료·광고 부스트를 모두 쓴 뒤에는 소액 결제로 키울 수 있어요.</p>
-    </div>
-    <div class="sheet-body">
-      <div class="priceline">
-        <span class="lb">부스트 1회</span>
-        <span class="amt">₩500</span>
-      </div>
-      <div class="kv"><span class="k">대상</span><span class="v" id="payItem">-</span></div>
-      <div class="kv"><span class="k">결제 수단</span><span class="v">카드 · 간편결제</span></div>
-      <div style="height:14px"></div>
-      <span class="testbadge" id="payTestBadge">● 테스트 모드 · 실제 결제가 발생하지 않습니다</span>
-      <!-- TODO: Toss Payments / Stripe / Ko-fi hook — PG 키를 CONFIG에 넣고
-           아래 버튼을 실제 결제창(결제 요청 → 승인 → 서버 검증)으로 교체하세요. -->
-      <button class="btn" id="payBtn" type="button">테스트 결제로 부스트</button>
-      <button class="btn ghost small" type="button" data-close style="margin-top:8px">다음에 할게요</button>
-      <p class="fine">실제 서비스에서는 결제 승인 후 서버(RPC)에서 부스트를 올리는 구조를 권장해요.</p>
     </div>
   </div>
 </div>
@@ -598,16 +501,6 @@ const CONFIG = {
   SUPABASE_URL: 'https://xvsutfyxxtkcxxbixgan.supabase.co',
   SUPABASE_ANON_KEY: 'sb_publishable_4SmEUMZCoyx8T5BkyjMzow_yr4u_Mx4',
   BUCKET: 'board-images',
-
-  // 부스트 정책
-  FREE_LIMIT: 10,      // 1~10회: 무료
-  AD_LIMIT: 10,        // 11~20회: 광고 시청 (최대 10회)
-  PRICE_KRW: 500,      // 21회~: 부스트당 결제
-  AD_SECONDS: 5,       // 리워드 광고 최소 시청 시간(초)
-
-  // 결제/광고 연동 지점 (비워두면 테스트 모드로 표시)
-  TOSS_CLIENT_KEY: '',        // TODO: Toss Payments / Stripe / Ko-fi hook
-  ADSENSE_CLIENT: '',         // TODO: AdSense / Rewarded Ad SDK hook
   MAX_UPLOAD_SIDE: 1600,
   LOCAL_UPLOAD_SIDE: 900
 };
@@ -616,8 +509,8 @@ const CONFIG = {
 <script>
 /* ==========================================================================
    화이트 보드 홍보판 — 앱 로직
-   1) 저장소(로컬/클라우드) 2) 샘플 아트 3) 마소니 레이아웃 4) 부스트 3단계
-   5) 업로드 6) Supabase 실시간
+   1) 저장소(로컬/클라우드) 2) 샘플 아트 3) 거품 물리 4) 렌더링
+   5) 부스트 6) 업로드 7) Supabase 실시간
    ========================================================================== */
 (function () {
   'use strict';
@@ -653,10 +546,7 @@ const CONFIG = {
 
   /* ---------------- 1. 저장소 ---------------- */
   const KEY_ITEMS = 'whiteboard.items.v1';
-  const KEY_MINE = 'whiteboard.mine.v1';
   const KEY_OWNED = 'promo_board_owned_ids';      // 이 브라우저에서 올린 홍보 id 목록
-  const KEY_COBOOST = 'promo_board_cobooost_v1';  // 같이 홍보하기 사용 횟수
-  const COBOOST_FREE = 5;                         // 같이 홍보 무료 5회
 
   const store = {
     get(k, fallback) {
@@ -671,8 +561,10 @@ const CONFIG = {
     },
     clear() {
       try {
-        localStorage.removeItem(KEY_ITEMS); localStorage.removeItem(KEY_MINE);
-        localStorage.removeItem(KEY_OWNED); localStorage.removeItem(KEY_COBOOST);
+        localStorage.removeItem(KEY_ITEMS);
+        localStorage.removeItem(KEY_OWNED);
+        localStorage.removeItem('whiteboard.mine.v1');       // 예전 부스트 횟수 기록
+        localStorage.removeItem('promo_board_cobooost_v1');  // 예전 같이 홍보 횟수
       } catch (e) {}
     }
   };
@@ -795,12 +687,9 @@ const CONFIG = {
   const state = {
     mode: 'local',      // 'local' | 'cloud'
     items: [],
-    mine: {},           // { itemId: 내가 준 부스트 횟수 }
     owned: [],          // 이 브라우저에서 올린 홍보 id (주인)
-    coboUsed: 0,        // 같이 홍보하기 사용 횟수 (5회까지 무료)
-    adMode: 'boost',    // 'boost' | 'coboost'
     currentId: null,    // 상세 모달 대상
-    pendingItem: null,  // 광고/결제 대상
+
     admin: false,       // 사이트 주인 관리자 모드가 켜졌는지
     adminPin: '',       // 관리자 비밀번호 — sessionStorage(이 탭)에만, 검증은 서버 RPC
     loading: false
@@ -820,7 +709,7 @@ const CONFIG = {
 
   /* ---------------- 3-b. 내 홍보 / 같이 홍보 ----------------
      - 이 브라우저에서 올린 홍보만 '내 홍보'로 기억합니다(promo_board_owned_ids).
-     - 남의 홍보는 '같이 홍보하기'로만 올릴 수 있고, 5회까지 무료 → 이후 광고.
+     - 둘 다 누르는 즉시 increment_boost 로 부스트 +1.
      ------------------------------------------------------------------ */
   function loadOwned() {
     const v = store.get(KEY_OWNED, []);
@@ -838,13 +727,6 @@ const CONFIG = {
     state.owned = state.owned.filter((x) => x !== String(id));
     store.set(KEY_OWNED, state.owned);
   }
-  function loadCoboost() {
-    const v = store.get(KEY_COBOOST, 0);
-    if (typeof v === 'number' && isFinite(v)) return Math.max(0, Math.floor(v));
-    if (v && typeof v.used === 'number' && isFinite(v.used)) return Math.max(0, Math.floor(v.used));
-    return 0;
-  }
-  function coboostLeft() { return Math.max(0, COBOOST_FREE - state.coboUsed); }
 
   /* ---------------- 4. 거품 물리 캔버스 (requestAnimationFrame) ----------------
      - 순백 캔버스 위를 둥근 거품이 아주 느긋하게 떠다닙니다.
@@ -1426,18 +1308,9 @@ const CONFIG = {
     }
   }
 
-  /* ---------------- 7. 부스트 3단계 ---------------- */
-  function boostState(item) {
-    const mine = state.mine[item.id] || 0;
-    if (mine < CONFIG.FREE_LIMIT) {
-      return { tier: 'free', mine: mine, left: CONFIG.FREE_LIMIT - mine };
-    }
-    if (mine < CONFIG.FREE_LIMIT + CONFIG.AD_LIMIT) {
-      return { tier: 'ad', mine: mine, left: CONFIG.FREE_LIMIT + CONFIG.AD_LIMIT - mine };
-    }
-    return { tier: 'paid', mine: mine, left: 0 };
-  }
-
+  /* ---------------- 7. 부스트 ----------------
+     누르면 바로 increment_boost 로 +1.
+     ------------------------------------------------------------ */
   function openDetail(id) {
     const item = getItem(id);
     if (!item) return;
@@ -1467,61 +1340,19 @@ const CONFIG = {
     openModal('#detailModal');
   }
 
-  /* 내 홍보면 주인용 부스트 3단계, 남의 홍보면 같이 홍보하기 */
+  /* 내 홍보면 '내 홍보 키우기', 남의 홍보면 '같이 홍보하기' — 둘 다 누르면 바로 +1 */
   function refreshDetailTier() {
     const item = getItem(state.currentId);
     if (!item) return;
     const owned = isOwned(item.id);
-    const tiers = $('#dTiers'), boostBtn = $('#dBoostBtn'), fine = $('#dFine');
+    const boostBtn = $('#dBoostBtn'), fine = $('#dFine');
     const coBtn = $('#dCoBtn'), coFine = $('#dCoFine');
 
-    tiers.hidden = !owned;
     boostBtn.hidden = !owned;
     fine.hidden = !owned;
     coBtn.hidden = owned;
     coFine.hidden = owned;
     syncAdminRow();               // 관리자 모드에서만 삭제 버튼
-
-    if (!owned) {
-      const left = coboostLeft();
-      if (left > 0) {
-        $('#dCoLabel').textContent = '같이 홍보하기';
-        $('#dCoCost').textContent = '(무료 ' + left + '회 남음)';
-        coFine.textContent = '이 홍보는 올린 사람만 직접 키울 수 있어요 · 같이 홍보하기 ' + COBOOST_FREE + '회까지 무료';
-      } else {
-        $('#dCoLabel').textContent = '광고 보고 같이 홍보하기';
-        $('#dCoCost').textContent = '광고 ' + CONFIG.AD_SECONDS + '초';
-        coFine.textContent = '무료 ' + COBOOST_FREE + '회를 다 썼어요 · 광고를 끝까지 보면 같이 홍보돼요';
-      }
-      return;
-    }
-
-    const st = boostState(item);
-    const chips = $$('#dTiers .tier');
-    chips.forEach((c) => {
-      const tier = c.dataset.tier;
-      c.dataset.active = String(tier === st.tier);
-      if (tier === 'free') c.textContent = '남은 무료 부스트 ' + (CONFIG.FREE_LIMIT - Math.min(st.mine, CONFIG.FREE_LIMIT)) + '/' + CONFIG.FREE_LIMIT;
-      if (tier === 'ad') {
-        const used = clamp(st.mine - CONFIG.FREE_LIMIT, 0, CONFIG.AD_LIMIT);
-        c.textContent = '광고 보고 키우기 ' + (CONFIG.AD_LIMIT - used) + '/' + CONFIG.AD_LIMIT;
-      }
-      if (tier === 'paid') c.textContent = '₩' + num(CONFIG.PRICE_KRW) + '/회';
-    });
-
-    const label = $('#dBoostLabel');
-    const cost = $('#dBoostCost');
-    label.textContent = '내 홍보 키우기';
-    if (st.tier === 'free') {
-      cost.textContent = '무료 ' + st.left + '회';
-      fine.textContent = '내 홍보라 직접 키울 수 있어요 · 부스트할수록 거품이 조금씩 커져요';
-    } else if (st.tier === 'ad') {
-      cost.textContent = '광고 ' + st.left + '/' + CONFIG.AD_LIMIT;
-      fine.textContent = '무료 부스트를 모두 썼어요. 짧은 광고로 ' + st.left + '회 더 키울 수 있어요';
-    } else {
-      cost.textContent = '₩' + num(CONFIG.PRICE_KRW);
-      fine.textContent = '무료 10회 · 광고 10회를 모두 사용했어요';
-    }
   }
 
   /* 실제 부스트 반영 (로컬 즉시 + 클라우드 RPC) */
@@ -1529,8 +1360,6 @@ const CONFIG = {
     const item = getItem(id);
     if (!item) return;
     item.boost_count += amount;
-    state.mine[id] = (state.mine[id] || 0) + amount;
-    store.set(KEY_MINE, state.mine);
     if (state.mode === 'local') store.set(KEY_ITEMS, state.items);
 
     bumpBubble(id);
@@ -1549,8 +1378,6 @@ const CONFIG = {
       sb.rpc('increment_boost', { item_id: id, amount: amount }).then(({ error }) => {
         if (error) {
           item.boost_count -= amount;
-          state.mine[id] = Math.max(0, (state.mine[id] || amount) - amount);
-          store.set(KEY_MINE, state.mine);
           render();
           if (state.currentId === id) refreshDetailTier();
           toast('부스트를 올리지 못했어요 · 잠시 후 다시');
@@ -1562,132 +1389,16 @@ const CONFIG = {
   $('#dBoostBtn').addEventListener('click', () => {
     const item = getItem(state.currentId);
     if (!item || !isOwned(item.id)) return;
-    const st = boostState(item);
-    if (st.tier === 'free') {
-      applyBoost(item.id, 1);
-      toast('부스트 +1 · 보드에서 커졌어요');
-    } else if (st.tier === 'ad') {
-      state.pendingItem = item.id;
-      startAd('boost');
-    } else {
-      state.pendingItem = item.id;
-      startPay();
-    }
+    applyBoost(item.id, 1);
+    toast('부스트 +1 · 보드에서 커졌어요');
   });
 
-  /* --- 남의 홍보: 같이 홍보하기 (5회까지 무료, 그 다음은 광고) --- */
-  function coBoostNow(id) {
-    const item = getItem(id);
-    if (!item || isOwned(id)) return;
-    state.coboUsed += 1;
-    store.set(KEY_COBOOST, { used: state.coboUsed });
-    applyBoost(id, 1);
-    toast('같이 홍보 완료 · 부스트 +1');
-    refreshDetailTier();
-  }
-
+  /* 남의 홍보: 같이 홍보하기 — 누르면 바로 +1 */
   $('#dCoBtn').addEventListener('click', () => {
     const item = getItem(state.currentId);
     if (!item || isOwned(item.id)) return;
-    if (state.coboUsed < COBOOST_FREE) {
-      coBoostNow(item.id);
-    } else {
-      state.pendingItem = item.id;
-      startAd('coboost');
-    }
-  });
-
-  /* --- 2단계: 리워드 광고 --- */
-  let adTimer = null;
-  function startAd(mode) {
-    const item = getItem(state.pendingItem);
-    if (!item) return;
-    state.adMode = mode === 'coboost' ? 'coboost' : 'boost';
-    const co = state.adMode === 'coboost';
-    closeModal('#detailModal');
-    $('#adTitle').textContent = co ? '광고 보고 같이 홍보하기' : '광고 보고 키우기';
-    $('#adSub').textContent = co
-      ? '짧은 광고를 끝까지 보면 이 홍보를 같이 홍보한 것으로 올려 드려요.'
-      : '짧은 광고를 끝까지 보면 부스트 1회를 드려요.';
-    $('#adBig').textContent = item.title;
-    $('#adGet').disabled = true;
-    $('#adGet').textContent = co ? '같이 홍보하기' : '부스트 받기';
-    $('#adBar').style.transition = 'none';
-    $('#adBar').style.width = '0%';
-    openModal('#adModal');
-
-    const total = CONFIG.AD_SECONDS;
-    let left = total;
-    const afterText = function (n) {
-      return '<b>' + n + '</b>' + (co ? '초 후 같이 홍보할 수 있어요' : '초 후 부스트를 받을 수 있어요');
-    };
-    $('#adTimer').innerHTML = afterText(left);
-    requestAnimationFrame(() => {
-      $('#adBar').style.transition = 'width ' + total + 's linear';
-      $('#adBar').style.width = '100%';
-    });
-
-    clearInterval(adTimer);
-    adTimer = setInterval(() => {
-      left -= 1;
-      if (left > 0) {
-        $('#adTimer').innerHTML = afterText(left);
-      } else {
-        clearInterval(adTimer);
-        $('#adTimer').innerHTML = co ? '시청 완료 · 같이 홍보할 수 있어요' : '시청 완료 · 부스트를 받을 수 있어요';
-        $('#adGet').disabled = false;
-      }
-    }, 1000);
-  }
-
-  function finishAd() {
-    const id = state.pendingItem;
-    if (!id) return;
-    const co = state.adMode === 'coboost';
-    if (co) {
-      coBoostNow(id);
-    } else {
-      applyBoost(id, 1);
-      toast('광고 시청 완료 · 부스트 +1');
-    }
-    closeModal('#adModal');
-    state.pendingItem = null;
-    if (getItem(id)) openDetail(id);
-  }
-
-  $('#adGet').addEventListener('click', () => {
-    /* TODO: AdSense / Rewarded Ad SDK hook — 광고 완료 콜백에서 이 함수를 호출하세요. */
-    finishAd();
-  });
-
-  /* --- 3단계: 소액 결제 --- */
-  function startPay() {
-    const item = getItem(state.pendingItem);
-    if (!item) return;
-    closeModal('#detailModal');
-    $('#payItem').textContent = item.title;
-    $('#payTestBadge').textContent = isPlaceholder(CONFIG.TOSS_CLIENT_KEY)
-      ? '● 테스트 모드 · 실제 결제가 발생하지 않습니다'
-      : '● 결제 모듈 연결됨';
-    openModal('#payModal');
-  }
-
-  $('#payBtn').addEventListener('click', () => {
-    /* TODO: Toss Payments / Stripe / Ko-fi hook — PG 결제 승인 후 finishPay()를 호출하세요. */
-    const id = state.pendingItem;
-    if (!id) return;
-    const btn = $('#payBtn');
-    btn.disabled = true;
-    btn.textContent = '처리 중…';
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.textContent = '테스트 결제로 부스트';
-      applyBoost(id, 1);
-      toast('결제(테스트) 완료 · 부스트 +1');
-      closeModal('#payModal');
-      state.pendingItem = null;
-      if (getItem(id)) openDetail(id);
-    }, 700);
+    applyBoost(item.id, 1);
+    toast('같이 홍보 완료 · 부스트 +1');
   });
 
   /* ---------------- 8. 업로드 ---------------- */
@@ -2043,9 +1754,7 @@ const CONFIG = {
       state.items = (Array.isArray(stored) && stored.length) ? stored : seedItems();
       store.set(KEY_ITEMS, state.items);
     }
-    state.mine = store.get(KEY_MINE, {}) || {};
     state.owned = loadOwned();
-    state.coboUsed = loadCoboost();
     state.mode = 'local';
     render();
   }
@@ -2061,9 +1770,7 @@ const CONFIG = {
     const forceLocal = /[?&]local=1/.test(qs);
     const adminWanted = /(^|[?&])admin(=1)?(&|$)/.test(qs);
     const cloudConfigured = !isPlaceholder(CONFIG.SUPABASE_URL) && !isPlaceholder(CONFIG.SUPABASE_ANON_KEY);
-    state.mine = store.get(KEY_MINE, {}) || {};
     state.owned = loadOwned();
-    state.coboUsed = loadCoboost();
 
     // 같은 탭에서 이미 인증한 관리자 모드는 새로고침해도 이어집니다(sessionStorage).
     state.adminPin = sessionGet(KEY_ADMIN_PIN);
@@ -2138,11 +1845,8 @@ const CONFIG = {
     stage: function () { return { w: W, h: H }; },
     openItem: openDetail,
     boost: applyBoost,
-    boostState: boostState,
     isOwned: isOwned,
     owned: function () { return state.owned.slice(); },
-    coboUsed: function () { return state.coboUsed; },
-    coboLeft: coboostLeft,
     client: function () { return sb; },
     admin: function () { return { active: state.admin, hasPin: !!state.adminPin }; },
     openAdmin: openAdminGate,
