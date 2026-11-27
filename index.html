@@ -244,6 +244,10 @@ h1 .thin{font-weight:500;color:var(--muted);letter-spacing:-.02em}
 .btn:hover{opacity:.9}
 .btn:active{transform:scale(.988)}
 .btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
+.btn .cost{
+  font-size:11.5px;font-weight:750;letter-spacing:-.01em;padding:5px 10px;border-radius:999px;
+  background:rgba(255,255,255,.16);color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;
+}
 .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line-strong)}
 .btn.ghost:hover{background:var(--soft);opacity:1}
 .btn.small{padding:12px;font-size:13.5px;border-radius:13px}
@@ -412,7 +416,8 @@ h1 .thin{font-weight:500;color:var(--muted);letter-spacing:-.02em}
       </div>
 
       <button class="btn" id="dBoostBtn" type="button">
-        <span aria-hidden="true">🔥</span><span id="dBoostLabel">무료로 키우기</span>
+        <span aria-hidden="true">🔥</span><span id="dBoostLabel">크게 키우기</span>
+        <span class="cost" id="dBoostCost">무료 10회</span>
       </button>
       <p class="fine" id="dFine">부스트 1회마다 보드에서 한 단계 커져요</p>
     </div>
@@ -993,15 +998,19 @@ const CONFIG = {
     });
 
     const label = $('#dBoostLabel');
+    const cost = $('#dBoostCost');
     const fine = $('#dFine');
     if (st.tier === 'free') {
-      label.textContent = '무료로 키우기 · ' + st.left + '회 남음';
+      label.textContent = '크게 키우기';
+      cost.textContent = '무료 ' + st.left + '회';
       fine.textContent = '부스트 1회마다 보드에서 한 단계 커져요';
     } else if (st.tier === 'ad') {
-      label.textContent = '광고 보고 키우기 · ' + st.left + '/' + CONFIG.AD_LIMIT;
+      label.textContent = '크게 키우기';
+      cost.textContent = '광고 ' + st.left + '/' + CONFIG.AD_LIMIT;
       fine.textContent = '무료 부스트를 모두 썼어요. 짧은 광고로 ' + st.left + '회 더 키울 수 있어요';
     } else {
-      label.textContent = '₩' + num(CONFIG.PRICE_KRW) + '으로 키우기';
+      label.textContent = '크게 키우기';
+      cost.textContent = '₩' + num(CONFIG.PRICE_KRW);
       fine.textContent = '무료 10회 · 광고 10회를 모두 사용했어요';
     }
   }
