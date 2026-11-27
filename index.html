@@ -3,8 +3,23 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="color-scheme" content="light" />
-<meta name="theme-color" content="#ffffff" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#ffffff" id="themeColor" />
+<script>
+/* 첫 화면이 하얗게 번쩍이지 않도록, 그리기 전에 테마를 먼저 정합니다.
+   저장된 선택이 없으면 기기 설정(prefers-color-scheme)을 따릅니다. */
+(function () {
+  try {
+    var t = localStorage.getItem('promo_board_theme_v1');
+    if (t !== 'dark' && t !== 'light') {
+      t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', t);
+    var m = document.getElementById('themeColor');
+    if (m && t === 'dark') m.setAttribute('content', '#0b0b0d');
+  } catch (e) {}
+})();
+</script>
 <title>화이트 보드 홍보판</title>
 <meta name="description" content="부스트가 많을수록 더 크게 떠오르는, 순백의 공유 홍보판." />
 <link rel="canonical" href="https://nugj12-code.github.io/Promo-board/" />
@@ -34,12 +49,87 @@
   --line:#ebebee;
   --line-strong:#dcdce0;
   --soft:#f7f7f8;
+  /* 다크 모드에서도 같은 규칙을 쓰도록 표면 색을 변수로 둡니다 */
+  --surface:#ffffff;
+  --surface-soft:#f6f6f7;
+  --surface-hover:#fafafa;
+  --line-hover:#c3c3c9;
+  --glass:rgba(255,255,255,.90);
+  --glass-strong:rgba(255,255,255,.94);
+  --on-ink:#ffffff;
+  --image-tint:#fbfbfc;
+  --scrim:rgba(12,12,14,.34);
   --radius:18px;
   --shadow-1:0 1px 2px rgba(10,10,12,.05), 0 10px 30px -22px rgba(10,10,12,.45);
   --shadow-2:0 2px 6px rgba(10,10,12,.07), 0 22px 50px -26px rgba(10,10,12,.55);
   --font:"Pretendard","Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR",-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --ease:cubic-bezier(.22,.72,.2,1);
 }
+
+/* ============================================================
+   다크 모드 — 눅눅하지 않은 딥 블랙. 라이트 모드는 순백 그대로.
+   ============================================================ */
+html[data-theme="dark"]{
+  --bg:#0b0b0d;
+  --ink:#f2f2f5;
+  --ink-soft:#c8c8d0;
+  --muted:#8a8a95;
+  --line:#232329;
+  --line-strong:#34343d;
+  --line-hover:#45454f;
+  --soft:#151519;
+  --surface:#151519;
+  --surface-soft:#101014;
+  --surface-hover:#1b1b21;
+  --glass:rgba(20,20,25,.86);
+  --glass-strong:rgba(24,24,29,.95);
+  --on-ink:#0b0b0d;
+  --image-tint:#1b1c21;
+  --scrim:rgba(0,0,0,.62);
+  --shadow-1:0 1px 2px rgba(0,0,0,.4),0 10px 30px -22px rgba(0,0,0,.9);
+  --shadow-2:0 2px 6px rgba(0,0,0,.45),0 22px 50px -26px rgba(0,0,0,.95);
+  color-scheme:dark;
+}
+/* 흰 유리를 어두운 캔버스에 맞게 다시 칠합니다 */
+html[data-theme="dark"] .admin-badge:hover{background:#e9e9ee;border-color:#e9e9ee}
+html[data-theme="dark"] .mode-badge{color:#9c9ca6}
+html[data-theme="dark"] .sheet{box-shadow:0 30px 90px -30px rgba(0,0,0,.9)}
+html[data-theme="dark"] .bubble{
+  box-shadow:0 1px 2px rgba(0,0,0,.5),0 18px 36px -26px rgba(0,0,0,.95);
+}
+html[data-theme="dark"] .bubble img{opacity:.94;filter:saturate(.96) contrast(1.03) brightness(.92)}
+html[data-theme="dark"] .bubble::before{
+  background:
+    radial-gradient(130% 130% at 50% 50%,rgba(255,255,255,0) 50%,rgba(255,255,255,.05) 74%,rgba(255,255,255,.14) 90%,rgba(255,255,255,.26) 100%),
+    radial-gradient(56% 48% at 30% 20%,rgba(255,255,255,.22) 0%,rgba(255,255,255,.08) 38%,rgba(255,255,255,0) 74%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),inset 0 -12px 24px rgba(0,0,0,.30);
+}
+html[data-theme="dark"] .bubble::after{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),inset 0 2px 10px rgba(255,255,255,.12);
+  background:radial-gradient(14% 10% at 70% 82%,rgba(255,255,255,.32) 0%,rgba(255,255,255,0) 72%);
+}
+html[data-theme="dark"] .bubble:hover,
+html[data-theme="dark"] .bubble:focus-visible{box-shadow:0 2px 10px rgba(0,0,0,.55),0 26px 54px -28px rgba(0,0,0,1)}
+html[data-theme="dark"] .bubble:hover img,
+html[data-theme="dark"] .bubble:focus-visible img{opacity:1;filter:saturate(1) contrast(1)}
+html[data-theme="dark"] .bubble.top{box-shadow:0 0 0 1.5px rgba(242,242,245,.5),0 2px 8px rgba(0,0,0,.5),0 22px 50px -26px rgba(0,0,0,.95)}
+html[data-theme="dark"] .bubble.top:hover,
+html[data-theme="dark"] .bubble.top:focus-visible{box-shadow:0 0 0 1.5px rgba(242,242,245,.62),0 24px 54px -28px rgba(0,0,0,.95)}
+html[data-theme="dark"] .bubble .chip{
+  color:#f4f4f7;background:rgba(16,16,21,.72);
+  border-color:rgba(255,255,255,.14);box-shadow:0 1px 2px rgba(0,0,0,.45);
+}
+html[data-theme="dark"] .bubble .chip .fire{filter:grayscale(1) opacity(.75)}
+html[data-theme="dark"] .plusone{
+  color:#f4f4f7;background:rgba(16,16,21,.9);border-color:rgba(255,255,255,.14);
+}
+html[data-theme="dark"] .field input::placeholder,
+html[data-theme="dark"] .field textarea::placeholder{color:#6b6b74}
+html[data-theme="dark"] .seg2 button[aria-pressed="true"]{box-shadow:0 1px 2px rgba(0,0,0,.4)}
+html[data-theme="dark"] .btn.danger{background:var(--surface);color:#ff7a71;border-color:#4a2521}
+html[data-theme="dark"] .btn.danger:hover{background:#1e1416;color:#ff958d;border-color:#5c2c27}
+html[data-theme="dark"] .btn.danger.armed{background:#c0271f;color:#fff;border-color:#c0271f}
+
 *{box-sizing:border-box}
 [hidden]{display:none !important}
 html,body{background:var(--bg)}
@@ -75,21 +165,32 @@ button{font-family:inherit}
   padding:6px 10px;border-radius:999px;letter-spacing:-.01em;white-space:nowrap;
 }
 .mode-badge .dot{width:6px;height:6px;border-radius:50%;border:1.5px solid #9a9aa1;flex:none}
-.mode-badge[data-mode="cloud"]{color:var(--ink);background:#fff;border-color:var(--line-strong)}
+.mode-badge[data-mode="cloud"]{color:var(--ink);background:var(--surface);border-color:var(--line-strong)}
 .mode-badge[data-mode="cloud"] .dot{background:var(--ink);border-color:var(--ink)}
 .mode-badge[hidden]{display:none}
 /* 관리자(사이트 주인) 모드 표시 — 누르면 바로 끔 */
 .admin-badge{
   appearance:none;display:inline-flex;align-items:center;gap:5px;
   font-size:10.5px;line-height:1.2;font-weight:800;letter-spacing:-.01em;
-  color:#fff;background:var(--ink);border:1px solid var(--ink);
+  color:var(--on-ink);background:var(--ink);border:1px solid var(--ink);
   padding:6px 10px;border-radius:999px;cursor:pointer;white-space:nowrap;
   transition:.18s var(--ease);
 }
-.admin-badge::before{content:"";width:5px;height:5px;border-radius:50%;background:#fff;opacity:.9;flex:none}
+.admin-badge::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.9;flex:none}
 .admin-badge:hover{background:#2a2a2e;border-color:#2a2a2e}
 .admin-badge[hidden]{display:none}
 .count{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:0;white-space:nowrap}
+/* 다크/라이트 전환 — 헤더 오른쪽 끝의 작은 달·해 버튼 */
+.theme-btn{
+  appearance:none;display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;padding:0;border-radius:50%;flex:none;
+  border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);
+  font-size:15px;line-height:1;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .18s var(--ease),border-color .18s var(--ease),transform .2s var(--ease);
+}
+.theme-btn:hover{background:var(--soft);transform:rotate(-8deg)}
+.theme-btn:active{transform:scale(.94)}
 
 /* DB 초기화 대기 안내 */
 .setupbar{
@@ -99,18 +200,18 @@ button{font-family:inherit}
 }
 .setupbar[hidden]{display:none}
 .setupbar .sb-title{font-weight:800;color:var(--ink);letter-spacing:-.03em}
-.setupbar code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:1px 5px}
+.setupbar code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:1px 5px}
 .setupbar .sb-btn{
-  margin-left:auto;appearance:none;border:1px solid var(--line-strong);background:#fff;color:var(--ink);
+  margin-left:auto;appearance:none;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);
   font-size:11.5px;font-weight:750;padding:8px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
   transition:.18s var(--ease);
 }
-.setupbar .sb-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.setupbar .sb-btn:hover{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
 
 /* ---------- 보드: 둥근 거품 캔버스 ---------- */
 .board{
   position:relative;flex:1 1 auto;min-height:0;width:100%;
-  margin:0;overflow:hidden;background:#fff;
+  margin:0;overflow:hidden;background:var(--bg);
 }
 .board.is-empty{min-height:200px}
 
@@ -129,7 +230,7 @@ button{font-family:inherit}
 /* 사진은 흰 캔버스 위에 반투명으로 얹혀 유리처럼 비쳐 보입니다 */
 .bubble img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
-  background:#fbfbfc;opacity:.76;
+  background:var(--image-tint);opacity:.76;
   filter:saturate(.92) contrast(.96);
   transition:transform .55s var(--ease),opacity .28s var(--ease),filter .28s var(--ease);
 }
@@ -195,7 +296,7 @@ button{font-family:inherit}
   position:fixed;right:clamp(16px,3vw,32px);bottom:calc(18px + env(safe-area-inset-bottom));
   z-index:40;display:inline-flex;align-items:center;gap:7px;
   height:52px;padding:0 21px 0 17px;border:0;border-radius:999px;
-  background:var(--ink);color:#fff;font-size:14.5px;font-weight:750;letter-spacing:-.02em;
+  background:var(--ink);color:var(--on-ink);font-size:14.5px;font-weight:750;letter-spacing:-.02em;
   box-shadow:0 6px 18px -6px rgba(10,10,12,.45),0 18px 40px -24px rgba(10,10,12,.6);
   cursor:pointer;transition:transform .2s var(--ease),box-shadow .2s var(--ease);
 }
@@ -206,38 +307,46 @@ button{font-family:inherit}
 /* ---------- 모달 공통 ---------- */
 .modal{
   position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
-  padding:clamp(10px,3vw,32px);background:rgba(12,12,14,.34);
+  padding:clamp(10px,3vw,32px);background:var(--scrim);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
 }
 .modal.open{display:flex;animation:fade .22s var(--ease)}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 .sheet{
   position:relative;width:min(540px,100%);max-height:min(92vh,880px);overflow:auto;
-  background:#fff;border-radius:26px;box-shadow:0 30px 90px -30px rgba(0,0,0,.55);
+  background:var(--surface);border-radius:26px;box-shadow:0 30px 90px -30px rgba(0,0,0,.55);
   animation:pop .3s var(--ease);-webkit-overflow-scrolling:touch;
 }
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
 .sheet .x{
   position:absolute;top:12px;right:12px;z-index:2;
-  width:34px;height:34px;border-radius:50%;border:1px solid rgba(10,10,12,.08);
-  background:rgba(255,255,255,.9);color:var(--ink);font-size:14px;line-height:1;
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--line-strong);
+  background:var(--glass);color:var(--ink);font-size:14px;line-height:1;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
 }
-.sheet .x:hover{background:#fff;border-color:var(--line-strong)}
+.sheet .x:hover{background:var(--surface);border-color:var(--line-strong)}
 .sheet-head{padding:22px 22px 0}
 .sheet-head h2{margin:0 0 4px;font-size:18px;font-weight:800;letter-spacing:-.035em}
 .sheet-head p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.5}
 .sheet-body{padding:16px 22px 22px}
 
 /* 상세 모달 */
-.dmedia{background:#f6f6f7;display:flex;align-items:center;justify-content:center;min-height:120px}
+.dmedia{background:var(--surface-soft);display:flex;align-items:center;justify-content:center;min-height:120px}
 .dmedia img{width:100%;max-height:min(46vh,420px);object-fit:contain;display:block}
 .dbody{padding:18px 22px 24px}
 .dmeta{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);letter-spacing:0;font-variant-numeric:tabular-nums}
 .dmeta .pill{background:var(--soft);border:1px solid var(--line);color:var(--ink);font-weight:700;padding:3px 8px;border-radius:999px;font-size:11px}
 .dbody h2{margin:9px 0 0;font-size:22px;font-weight:800;letter-spacing:-.04em;line-height:1.25}
-.ownerb{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:-.01em;color:#fff;background:var(--ink);border-radius:999px;padding:3px 9px;white-space:nowrap}
+/* 누가 올렸는지 — 제목 바로 아래 한 줄 */
+.dauthor{display:flex;align-items:center;gap:6px;margin:9px 0 0;min-width:0}
+.dauthor .who{font-size:10.5px;font-weight:800;letter-spacing:.02em;color:var(--muted);flex:none}
+.dauthor b{
+  font-size:13px;font-weight:750;letter-spacing:-.02em;color:var(--ink);
+  max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.dauthor b.anon{color:var(--muted);font-weight:600}
+.ownerb{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:-.01em;color:var(--on-ink);background:var(--ink);border-radius:999px;padding:3px 9px;white-space:nowrap}
 /* 직접 쓴 설명 — 눌렀을 때 가장 먼저 눈에 들어오는 부분 */
 .ddescwrap{margin:12px 0 0;padding:13px 15px 15px;border:1px solid var(--line);border-radius:16px;background:var(--soft)}
 .ddesclabel{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;letter-spacing:.02em;color:var(--muted)}
@@ -254,7 +363,7 @@ button{font-family:inherit}
 /* 관리자 삭제 — 상세 모달 맨 아래, 두 번 눌러야 지워집니다 */
 .adminrow{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
 .adminrow[hidden]{display:none}
-.btn.danger{background:#fff;color:#c0271f;border:1px solid #f1c9c5;box-shadow:none}
+.btn.danger{background:var(--surface);color:#c0271f;border:1px solid #f1c9c5;box-shadow:none}
 .btn.danger:hover{background:#fdf3f2;color:#a82019;border-color:#e7b3ad;opacity:1}
 .btn.danger.armed{background:#c0271f;color:#fff;border-color:#c0271f}
 .adminrow .fine{margin-top:9px}
@@ -262,12 +371,12 @@ button{font-family:inherit}
   appearance:none;border:0;width:100%;padding:16px;border-radius:16px;cursor:pointer;
   font-size:15px;font-weight:750;letter-spacing:-.025em;
   display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  background:var(--ink);color:#fff;transition:transform .16s var(--ease),opacity .2s,background .2s;
+  background:var(--ink);color:var(--on-ink);transition:transform .16s var(--ease),opacity .2s,background .2s;
 }
 .btn:hover{opacity:.9}
 .btn:active{transform:scale(.988)}
 .btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
-.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line-strong)}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line-strong)}
 .btn.ghost:hover{background:var(--soft);opacity:1}
 .btn.small{padding:12px;font-size:13.5px;border-radius:13px}
 .fine{margin:10px 0 0;font-size:11px;color:var(--muted);text-align:center;line-height:1.5}
@@ -277,52 +386,54 @@ button{font-family:inherit}
 /* 업로드 모달 */
 .drop{
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
-  border:1.5px dashed var(--line-strong);border-radius:16px;background:#fcfcfc;
+  border:1.5px dashed var(--line-strong);border-radius:16px;background:var(--surface-soft);
   padding:24px 16px;cursor:pointer;color:var(--muted);font-size:12.5px;text-align:center;
   transition:.2s var(--ease);overflow:hidden;position:relative;margin-bottom:14px;
 }
-.drop:hover{border-color:#c3c3c9;background:#fafafa}
-.drop.drag{border-color:var(--ink);background:#f4f4f5}
+.drop:hover{border-color:var(--line-hover);background:var(--surface-hover)}
+.drop.drag{border-color:var(--ink);background:var(--surface-hover)}
 .drop .big{font-size:13.5px;font-weight:750;color:var(--ink);letter-spacing:-.03em}
 .drop .hint{font-size:11px}
-.drop.has{padding:0;border-style:solid;border-color:var(--line);background:#f6f6f7}
+.drop.has{padding:0;border-style:solid;border-color:var(--line);background:var(--surface-soft)}
 .drop img{display:block;width:100%;max-height:220px;object-fit:contain}
 .drop .swap{
   position:absolute;right:8px;bottom:8px;font-size:10.5px;font-weight:700;color:var(--ink);
-  background:rgba(255,255,255,.94);border:1px solid rgba(10,10,12,.08);border-radius:999px;padding:4px 9px;
+  background:var(--glass-strong);border:1px solid var(--line-strong);border-radius:999px;padding:4px 9px;
 }
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}
 .field .lb{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:650;color:var(--ink-soft)}
 .field .lb .opt{font-weight:500;color:var(--muted);font-size:11px}
 .field input,.field textarea{
   font:inherit;font-size:14px;padding:12px 13px;border:1px solid var(--line-strong);border-radius:12px;
-  background:#fff;color:var(--ink);outline:none;transition:.18s var(--ease);width:100%;letter-spacing:-.01em;
+  background:var(--surface);color:var(--ink);outline:none;transition:.18s var(--ease);width:100%;letter-spacing:-.01em;
 }
 .field textarea{resize:vertical;min-height:74px;line-height:1.55}
 .field input:focus,.field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(10,10,12,.07)}
 .field input::placeholder,.field textarea::placeholder{color:#b6b6bc}
-.err{margin:0 0 12px;font-size:12px;font-weight:650;color:#0b0b0c;background:#f4f4f5;border-radius:10px;padding:10px 12px;border:1px solid var(--line)}
+.hint-line{font-size:10.5px;line-height:1.45;color:var(--muted)}
+.hint-line[hidden]{display:none}
+.err{margin:0 0 12px;font-size:12px;font-weight:650;color:var(--ink);background:var(--surface-hover);border-radius:10px;padding:10px 12px;border:1px solid var(--line)}
 .err[hidden]{display:none}
 .seg2{display:flex;gap:6px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:14px}
 .seg2 button{
   flex:1;appearance:none;border:0;background:transparent;color:var(--muted);font-size:12.5px;font-weight:700;
   padding:9px;border-radius:9px;cursor:pointer;transition:.18s var(--ease);letter-spacing:-.02em;
 }
-.seg2 button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(10,10,12,.08)}
+.seg2 button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(10,10,12,.08)}
 .counter{font-size:10.5px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
 
 /* 토스트 */
 .toast{
   position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));z-index:200;
   transform:translate(-50%,16px);opacity:0;pointer-events:none;
-  background:var(--ink);color:#fff;font-size:13px;font-weight:650;letter-spacing:-.02em;
+  background:var(--ink);color:var(--on-ink);font-size:13px;font-weight:650;letter-spacing:-.02em;
   padding:11px 17px;border-radius:999px;box-shadow:0 16px 40px -18px rgba(0,0,0,.6);
   transition:opacity .28s var(--ease),transform .28s var(--ease);max-width:calc(100vw - 40px);
 }
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* 스켈레톤/로딩 */
-.boot{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:150;transition:opacity .3s}
+.boot{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:150;transition:opacity .3s}
 .boot span{width:34px;height:34px;border-radius:9px;background:var(--ink);animation:breathe 1.2s infinite var(--ease)}
 @keyframes breathe{0%,100%{opacity:.14;transform:scale(.9)}50%{opacity:1;transform:scale(1)}}
 .boot.gone{opacity:0;pointer-events:none}
@@ -355,6 +466,7 @@ button{font-family:inherit}
       <span class="mode-badge" id="modeBadge" hidden><i class="dot"></i><span id="modeText"></span></span>
       <button class="admin-badge" id="adminBadge" type="button" hidden title="누르면 관리자 모드를 끕니다" aria-label="관리자 모드 끄기">관리자</button>
       <span class="count" id="boardCount">0개</span>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="다크 모드로 보기" title="다크 모드로 보기" aria-pressed="false">🌙</button>
     </div>
   </header>
 
@@ -388,6 +500,11 @@ button{font-family:inherit}
         <span class="ownerb" id="dOwner" hidden>내 홍보</span>
       </div>
       <h2 id="dTitle">제목</h2>
+
+      <div class="dauthor">
+        <span class="who">올린 사람</span>
+        <b id="dAuthor">익명</b>
+      </div>
 
       <div class="ddescwrap">
         <span class="ddesclabel">직접 쓴 설명</span>
@@ -423,9 +540,16 @@ button{font-family:inherit}
     <button class="x" type="button" data-close aria-label="닫기">✕</button>
     <div class="sheet-head">
       <h2 id="upHeading">새 홍보 올리기</h2>
-      <p>이미지를 올리고 직접 쓴 설명을 붙이면, 누를 때 그 설명이 크게 보여요.</p>
+      <p>닉네임을 먼저 적고, 이미지와 설명을 붙이면 보드에 거품으로 떠요.</p>
     </div>
     <div class="sheet-body">
+      <!-- 가장 먼저: 누가 올렸는지 -->
+      <div class="field">
+        <span class="lb">닉네임 <span class="opt">필수 · 20자</span></span>
+        <input id="upNick" type="text" maxlength="20" placeholder="보드에 보일 이름 (예) 하준" autocomplete="nickname" />
+        <span class="hint-line" id="nickHint" hidden>서버에 닉네임 칸이 아직 없어 이 브라우저에서 올린 카드에만 보여요</span>
+      </div>
+
       <div class="seg2" role="group" aria-label="이미지 방식">
         <button type="button" id="segFile" aria-pressed="true">이미지 파일</button>
         <button type="button" id="segUrl" aria-pressed="false">이미지 링크</button>
@@ -544,9 +668,41 @@ const CONFIG = {
     toast._t = setTimeout(() => el.classList.remove('show'), 2400);
   }
 
+  /* ---------------- 0-b. 다크 모드 ----------------
+     - 헤드에서 먼저 정한 테마(data-theme)를 버튼에 반영합니다.
+     - 누르면 light ↔ dark 로 바뀌고, 선택은 이 브라우저에 남습니다.
+     -------------------------------------------------- */
+  const KEY_THEME = 'promo_board_theme_v1';
+  function currentTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  }
+  function applyTheme(theme, opts) {
+    const dark = theme === 'dark';
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    const meta = document.getElementById('themeColor');
+    if (meta) meta.setAttribute('content', dark ? '#0b0b0d' : '#ffffff');
+    const btn = $('#themeBtn');
+    if (btn) {
+      btn.textContent = dark ? '☀️' : '🌙';
+      btn.setAttribute('aria-pressed', String(dark));
+      const label = dark ? '라이트 모드로 보기' : '다크 모드로 보기';
+      btn.setAttribute('aria-label', label);
+      btn.title = label;
+    }
+    if (!(opts && opts.silent)) {
+      try { localStorage.setItem(KEY_THEME, dark ? 'dark' : 'light'); } catch (e) {}
+    }
+  }
+  $('#themeBtn').addEventListener('click', function () {
+    applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+  });
+  applyTheme(currentTheme(), { silent: true });   // 저장된 선택이 없으면 기기 설정을 그대로
+
   /* ---------------- 1. 저장소 ---------------- */
   const KEY_ITEMS = 'whiteboard.items.v1';
   const KEY_OWNED = 'promo_board_owned_ids';      // 이 브라우저에서 올린 홍보 id 목록
+  const KEY_NICK = 'promo_board_nickname_v1';     // 마지막으로 쓴 닉네임
+  const KEY_NICKS = 'promo_board_nicknames_v1';   // id → 닉네임 (DB 컬럼이 없어도 표시용)
 
   const store = {
     get(k, fallback) {
@@ -688,6 +844,8 @@ const CONFIG = {
     mode: 'local',      // 'local' | 'cloud'
     items: [],
     owned: [],          // 이 브라우저에서 올린 홍보 id (주인)
+    nicknames: {},      // id → 이 브라우저가 기억하는 작성자 닉네임
+    nickColumn: null,   // DB nickname 컬럼: null 모름 / true 있음 / false 없음
     currentId: null,    // 상세 모달 대상
 
     admin: false,       // 사이트 주인 관리자 모드가 켜졌는지
@@ -726,6 +884,38 @@ const CONFIG = {
   function unmarkOwned(id) {
     state.owned = state.owned.filter((x) => x !== String(id));
     store.set(KEY_OWNED, state.owned);
+  }
+
+  /* ---------------- 3-c. 닉네임 ----------------
+     - 마지막에 쓴 닉네임은 다음 글에 미리 채워 둡니다.
+     - DB에 nickname 컬럼이 아직 없어도, 이 브라우저에서 올린 카드는
+       id → 닉네임으로 기억해 두었다가 상세 화면에 보여 줍니다.
+     -------------------------------------------- */
+  function loadNicknames() {
+    const v = store.get(KEY_NICKS, {});
+    return (v && typeof v === 'object' && !Array.isArray(v)) ? v : {};
+  }
+  function lastNickname() {
+    const v = store.get(KEY_NICK, '');
+    return typeof v === 'string' ? v : '';
+  }
+  function rememberNickname(id, name) {
+    const nick = String(name || '').trim();
+    if (!nick) return;
+    store.set(KEY_NICK, nick);
+    if (!id) return;
+    state.nicknames[String(id)] = nick;
+    store.set(KEY_NICKS, state.nicknames);
+  }
+  function nicknameOf(item) {
+    if (!item) return '';
+    const direct = String(item.nickname || '').trim();
+    if (direct) return direct;
+    return String(state.nicknames[String(item.id)] || '').trim();
+  }
+  function syncNickHint() {
+    const hint = $('#nickHint');
+    if (hint) hint.hidden = state.nickColumn !== false;
   }
 
   /* ---------------- 4. 거품 물리 캔버스 (requestAnimationFrame) ----------------
@@ -974,7 +1164,8 @@ const CONFIG = {
     b.el.querySelector('.chip b').textContent = num(item.boost_count);
     b.el.dataset.level = String(levelOf(item.boost_count));
     b.el.classList.toggle('top', rank === 1);
-    b.el.setAttribute('aria-label', item.title + ' · 부스트 ' + num(item.boost_count) + ' · 상세 보기');
+    const who = nicknameOf(item);
+    b.el.setAttribute('aria-label', item.title + (who ? ' · ' + who : '') + ' · 부스트 ' + num(item.boost_count) + ' · 상세 보기');
   }
 
   function render() {
@@ -1327,6 +1518,12 @@ const CONFIG = {
     $('#dTitle').textContent = item.title;
     $('#dOwner').hidden = !isOwned(item.id);
 
+    /* 누가 올렸는지 — 닉네임이 없는 예전 카드는 '익명'으로 조용히 대신합니다 */
+    const author = nicknameOf(item);
+    const authorEl = $('#dAuthor');
+    authorEl.textContent = author || '익명';
+    authorEl.classList.toggle('anon', !author);
+
     /* 글쓴이가 직접 쓴 설명 — 모달에서 가장 크게 보여 줍니다 */
     const desc = String(item.description || '').trim();
     $('#dDesc').textContent = desc || '작성된 설명이 없어요.';
@@ -1409,7 +1606,7 @@ const CONFIG = {
   function openUpload() {
     resetUpload();
     openModal('#upModal');
-    setTimeout(() => $('#upTitle').focus({ preventScroll: true }), 120);
+    setTimeout(() => $('#upNick').focus({ preventScroll: true }), 120);
   }
   function resetUpload() {
     pickedFile = null;
@@ -1419,9 +1616,11 @@ const CONFIG = {
     $('#drop').classList.remove('has', 'drag');
     $('#dropBig').hidden = false; $('#dropHint').hidden = false; $('#dropSwap').hidden = true;
     $('#fileInput').value = '';
+    $('#upNick').value = lastNickname();       // 지난번 닉네임을 미리 채워 둡니다
     $('#upTitle').value = ''; $('#upDesc').value = ''; $('#upLink').value = ''; $('#upImageUrl').value = '';
     $('#descCount').textContent = '0';
     $('#upErr').hidden = true;
+    syncNickHint();
     setUploadMode('file');
   }
   function setUploadMode(mode) {
@@ -1500,11 +1699,14 @@ const CONFIG = {
   }
 
   $('#upSubmit').addEventListener('click', async () => {
+    const nick = $('#upNick').value.trim().replace(/\s+/g, ' ');
     const title = $('#upTitle').value.trim();
     const desc = $('#upDesc').value.trim();
     const linkRaw = $('#upLink').value.trim();
     const imgUrl = $('#upImageUrl').value.trim();
 
+    if (!nick) { showUpErr('닉네임을 입력해 주세요.'); $('#upNick').focus(); return; }
+    if (nick.length > 20) { showUpErr('닉네임은 20자까지 쓸 수 있어요.'); $('#upNick').focus(); return; }
     if (!title) { showUpErr('제목을 입력해 주세요.'); return; }
     if (uploadMode === 'file' && !pickedFile) { showUpErr('이미지를 선택해 주세요.'); return; }
     if (uploadMode === 'url' && !safeUrl(imgUrl)) { showUpErr('http(s)로 시작하는 이미지 주소를 넣어 주세요.'); return; }
@@ -1535,6 +1737,7 @@ const CONFIG = {
 
       const item = {
         id: uid(),
+        nickname: nick,
         title: title,
         description: desc,
         link_url: safeUrl(linkRaw) || null,
@@ -1545,19 +1748,25 @@ const CONFIG = {
       };
 
       if (state.mode === 'cloud' && sb) {
-        const ins = await sb.from('promo_items').insert({
+        const ins = await insertPromo({
+          nickname: item.nickname,
           title: item.title,
           description: item.description,
           link_url: item.link_url,
           image_url: item.image_url,
           boost_count: 1
-        }).select().single();
+        });
         if (ins.error) throw ins.error;
-        if (ins.data) { item.id = ins.data.id; item.created_at = ins.data.created_at; }
+        if (ins.data) {
+          item.id = ins.data.id;
+          item.created_at = ins.data.created_at;
+          item.nickname = ins.data.nickname || item.nickname;   // 컬럼이 아직 없으면 이 화면에서만
+        }
       }
 
       if (!getItem(item.id)) state.items.push(item);
-      markOwned(item.id);   // 이 브라우저에서 올린 홍보 = 내 홍보
+      markOwned(item.id);              // 이 브라우저에서 올린 홍보 = 내 홍보
+      rememberNickname(item.id, nick); // 다음 글에도 같은 닉네임을 채워 둡니다
       if (state.mode === 'local') {
         const ok = store.set(KEY_ITEMS, state.items);
         if (!ok) {
@@ -1602,6 +1811,7 @@ const CONFIG = {
   function normalize(row) {
     return {
       id: row.id,
+      nickname: row.nickname || '',
       title: row.title || '',
       description: row.description || '',
       link_url: row.link_url || null,
@@ -1620,6 +1830,36 @@ const CONFIG = {
       /could not find the table|schema cache|does not exist/i.test(msg);
   }
 
+  /* 이미 있는 카드에 nickname 컬럼이 실려 오는지로 DB 상태를 알아냅니다.
+     - 실려 오면: 새 카드에도 닉네임을 함께 저장
+     - 아니면: 닉네임 없이 저장하고, 이 브라우저가 기억한 닉네임으로 보여 줍니다
+     - 카드가 하나도 없으면 알 수 없음(null) → 올릴 때 확인합니다 */
+  function detectNicknameColumn(rows) {
+    if (!Array.isArray(rows) || !rows.length) return;
+    state.nickColumn = Object.prototype.hasOwnProperty.call(rows[0], 'nickname');
+    syncNickHint();
+  }
+
+  /* nickname 컬럼이 없는 프로젝트에서도 글을 올릴 수 있게,
+     실패하면 닉네임만 빼고 한 번 더 시도합니다. */
+  async function insertPromo(row) {
+    const payload = Object.assign({}, row);
+    if (state.nickColumn === false || !payload.nickname) delete payload.nickname;
+    let res = await sb.from('promo_items').insert(payload).select().single();
+    if (res.error && payload.nickname) {
+      const code = String(res.error.code || '');
+      const msg = String(res.error.message || '');
+      if (code === '42703' || /column .*does not exist/i.test(msg)) {
+        state.nickColumn = false;
+        syncNickHint();
+        const fallback = Object.assign({}, payload);
+        delete fallback.nickname;
+        res = await sb.from('promo_items').insert(fallback).select().single();
+      }
+    }
+    return res;
+  }
+
   let cloudChannel = null;
   let cloudTrying = false;
 
@@ -1631,13 +1871,13 @@ const CONFIG = {
         const sdk = await loadSupabaseSDK();
         sb = sdk.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
       }
-
       const res = await sb.from('promo_items').select('*').order('created_at', { ascending: true });
       if (res.error) throw res.error;
 
       // 대기 중에 이 브라우저에서 올린 카드는 클라우드로 옮겨 줍니다.
       const locals = state.items.filter((i) => i.isLocal);
 
+      detectNicknameColumn(res.data || []);   // DB에 nickname 컬럼이 있는지
       state.items = (res.data || []).map(normalize);
       state.mode = 'cloud';
       setMode('cloud', '실시간 공유 중 · Supabase');
@@ -1664,10 +1904,11 @@ const CONFIG = {
           if (up.error) throw up.error;
           imageUrl = sb.storage.from(CONFIG.BUCKET).getPublicUrl(path).data.publicUrl;
         }
-        const ins = await sb.from('promo_items').insert({
+        const ins = await insertPromo({
+          nickname: it.nickname || nicknameOf(it) || '',
           title: it.title, description: it.description, link_url: it.link_url,
           image_url: imageUrl, boost_count: 1
-        }).select().single();
+        });
         if (ins.error) throw ins.error;
         if (ins.data && ins.data.id) {
           markOwned(ins.data.id);
@@ -1693,6 +1934,7 @@ const CONFIG = {
         const type = payload.eventType;
         if (type === 'INSERT') {
           if (payload.new && !getItem(payload.new.id)) {
+            detectNicknameColumn([payload.new]);
             state.items.push(normalize(payload.new));
             render();
           }
@@ -1771,6 +2013,7 @@ const CONFIG = {
     const adminWanted = /(^|[?&])admin(=1)?(&|$)/.test(qs);
     const cloudConfigured = !isPlaceholder(CONFIG.SUPABASE_URL) && !isPlaceholder(CONFIG.SUPABASE_ANON_KEY);
     state.owned = loadOwned();
+    state.nicknames = loadNicknames();
 
     // 같은 탭에서 이미 인증한 관리자 모드는 새로고침해도 이어집니다(sessionStorage).
     state.adminPin = sessionGet(KEY_ADMIN_PIN);
@@ -1847,6 +2090,10 @@ const CONFIG = {
     boost: applyBoost,
     isOwned: isOwned,
     owned: function () { return state.owned.slice(); },
+    theme: currentTheme,
+    setTheme: applyTheme,
+    nickColumn: function () { return state.nickColumn; },
+    nicknameOf: nicknameOf,
     client: function () { return sb; },
     admin: function () { return { active: state.admin, hasPin: !!state.adminPin }; },
     openAdmin: openAdminGate,

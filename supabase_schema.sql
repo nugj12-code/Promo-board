@@ -16,6 +16,7 @@ grant usage on schema public to anon, authenticated;
 -- ---------------------------------------------------------------------
 create table if not exists public.promo_items (
   id          uuid        primary key default gen_random_uuid(),
+  nickname    text        check (nickname is null or char_length(nickname) between 1 and 20),
   title       text        not null check (char_length(title) between 1 and 60),
   description text        not null default '' check (char_length(description) <= 200),
   link_url    text        check (link_url is null or link_url ~* '^https?://'),
@@ -25,6 +26,9 @@ create table if not exists public.promo_items (
 );
 
 -- 이미 테이블이 있던 경우에도 빠진 컬럼이 있으면 채워 넣기
+-- 작성자 닉네임 — 이미 테이블이 있는 프로젝트는 이 한 줄만 실행해도 됩니다.
+--   alter table public.promo_items add column if not exists nickname text;
+alter table public.promo_items add column if not exists nickname    text;
 alter table public.promo_items add column if not exists description text not null default '';
 alter table public.promo_items add column if not exists link_url    text;
 alter table public.promo_items add column if not exists boost_count integer not null default 1;

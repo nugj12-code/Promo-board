@@ -28,6 +28,32 @@
 - 설명을 비워 두고 올렸다면 `작성된 설명이 없어요.` 로 표시됩니다.
 - 올릴 때 입력하는 칸의 이름도 **`직접 쓴 설명`** 입니다(선택 · 200자).
 
+### 올린 사람(닉네임)이 보입니다
+
+- `+ 홍보하기` 창의 **가장 첫 칸**이 `닉네임`(필수 · 20자)입니다. 비어 있으면 `닉네임을 입력해 주세요.` 로 멈춥니다.
+- 마지막에 쓴 닉네임은 `localStorage`(`promo_board_nickname_v1`)에 남겨 다음 글에 미리 채워 둡니다.
+- 거품을 누르면 상세 모달의 제목 아래 **`올린 사람  닉네임`** 이 한 줄로 나옵니다.
+- 닉네임이 없던 예전 카드는 **`익명`** 으로 조용히 표시합니다.
+
+> **DB 준비**: 2026-11-28 기준 운영 중인 `promo_items` 에는 아직 `nickname` 컬럼이 없습니다.
+> Supabase SQL Editor 에서 아래 한 줄을 실행하면 그때부터 닉네임이 **모든 방문자에게** 저장·표시됩니다.
+>
+> ```sql
+> alter table public.promo_items add column if not exists nickname text;
+> ```
+>
+> 그 전에도 글은 그대로 올라갑니다(닉네임 칸 없이 저장). 닉네임은 **올린 브라우저에만** 기억해 보여 주고,
+> 올리기 창에 `서버에 닉네임 칸이 아직 없어 이 브라우저에서 올린 카드에만 보여요` 라고 적힙니다.
+> 앱은 첫 조회에서 카드에 `nickname` 이 실려 오는지로 컬럼 유무를 스스로 알아냅니다(추가 요청 없음).
+> 컬럼이 없는데 닉네임을 보냈다면 서버 오류를 보고 닉네임만 빼서 한 번 더 시도하므로, 글은 절대 유실되지 않습니다.
+
+### 다크 모드
+
+- 오른쪽 위 **🌙 / ☀️** 버튼으로 라이트 ↔ 다크를 바로 바꿉니다(왼쪽 위는 지금처럼 비어 있습니다).
+- 선택은 `localStorage`(`promo_board_theme_v1`)에 남고, **처음 방문**에는 기기 설정(`prefers-color-scheme`)을 따릅니다.
+- 라이트는 지금까지의 순백 `#FFFFFF` 그대로, 다크는 `#0B0B0D` 바탕에 유리 거품의 림·광택·그림자와 모달·입력창을 어둡게 다시 칠했습니다.
+- 첫 화면이 하얗게 번쩍이지 않도록 테마는 `<head>` 안에서, 화면을 그리기 전에 정합니다.
+
 ### 내 홍보와 다른 사람 홍보
 
 | 누가 보나 | 무엇이 보이나 | 어떻게 올리나 |
@@ -163,7 +189,8 @@ if coalesce(p_pin, '') <> '내가_정한_비밀번호' then
 index.html            앱 전체 (HTML + CSS + JS, 의존성 없음 · supabase-js만 CDN)
 supabase_schema.sql   DB · RPC · Realtime · Storage 한 번에 설정 (idempotent)
 og.png                1200×630 미리보기 이미지 (OG 태그에도 사용)
-live-preview.png      실제 라이브 화면 캡처 (모바일 390×844)
+live-preview.png      실제 라이브 화면 캡처 (모바일 390×844 · 라이트)
+live-preview-dark.png 실제 라이브 화면 캡처 (모바일 390×844 · 다크)
 .nojekyll             GitHub Pages 가 파일을 그대로 서빙하도록
 README.md             이 문서
 ```
@@ -179,6 +206,9 @@ README.md             이 문서
 | `stepMotion()` | 거품 물리: 표류·충돌·벽 반사 |
 | `render()` | 거품 생성·갱신과 초기 배치(황금각 나선) |
 | `isOwned()` / `markOwned()` | 이 브라우저에서 올린 홍보인지 판단 (`promo_board_owned_ids`) |
+| `nicknameOf()` / `rememberNickname()` | 카드의 작성자 닉네임 (DB 값 → 이 브라우저 기억 순) |
+| `detectNicknameColumn()` / `insertPromo()` | DB `nickname` 컬럼 유무 자동 판별 · 컬럼이 없어도 글이 올라가게 재시도 |
+| `applyTheme()` | 라이트/다크 전환 · `localStorage` 저장 · 기기 설정 따르기 |
 | `applyBoost()` | 화면 반영 + `increment_boost` RPC 호출 (내 홍보 키우기·같이 홍보하기 공통) |
 | `setAdmin()` / `adminDelete()` | 사이트 주인 관리자 모드 켜고 끄기 · `admin_delete_promo` RPC 로 삭제 |
 | `connectCloud()` | Supabase 조회·구독, 테이블 없을 때 대기 처리 |
@@ -190,6 +220,7 @@ README.md             이 문서
 ```sql
 promo_items
   id          uuid primary key default gen_random_uuid()
+  nickname    text                      -- 작성자 닉네임 (선택 · 1~20자)
   title       text        not null      -- 1~60자
   description text        not null default ''
   link_url    text                      -- http(s)만 허용
@@ -243,6 +274,16 @@ open "index.html?reset=1"
 ---
 
 ## 8. 검증 기록
+
+**닉네임 입력·표시 + 다크 모드** (2026-11-28, 헤드리스 Chrome — 1440×900 데스크톱 / 390×844 모바일)
+
+- 다크 모드: 🌙 누르면 `html[data-theme="dark"]` · 배경 `rgb(11,11,13)` · 버튼이 ☀️ 로 · `localStorage.promo_board_theme_v1 = dark` · 새로고침 후에도 다크 유지
+  · 라이트로 되돌리면 배경 `rgb(255,255,255)` 순백 유지 · 첫 방문은 기기 설정(`color_scheme: dark`)을 따라 다크로 열림 · 콘솔 에러 0
+- 닉네임: 올리기 창의 첫 입력이 `upNick` 이고 자동 포커스도 여기 · 비우면 `닉네임을 입력해 주세요.` 로 멈춤 · 저장 후 다시 열면 그 닉네임이 미리 채워짐
+- 상세 모달: 방금 올린 카드 `올린 사람 하준` · 닉네임 없는 예전 카드 `익명`(흐린 색)
+- 클라우드(네트워크만 모의, 실제 DB 쓰기 0건): 컬럼이 없으면 `POST /rest/v1/promo_items` 본문에 `nickname` 이 없고 안내 문구가 보임 · 있으면 `nickname` 이 실려 저장됨 · 두 경우 모두 글이 올라가고 콘솔 에러 0
+- 실제 Supabase 조회(읽기 전용): `nickColumn = false` · `실시간 공유 중 · Supabase` · 카드 1개 · 안내 문구 표시 · 콘솔 에러 0
+- 다크 화면: 보드·상세 모달·올리기 창에서 글자 대비 유지(제목 `rgb(242,242,245)` / 시트 `rgb(21,21,25)`) · 가로 스크롤 0
 
 **가짜 광고·결제 UI 제거 · 바로 부스트 개편** (2026-11-27, 헤드리스 Chrome — 390×844 모바일 / 1440×900 데스크톱, `?local=1` 로컬 모드)
 
