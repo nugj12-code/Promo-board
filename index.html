@@ -169,6 +169,7 @@ h1 .thin{font-weight:500;color:var(--muted);letter-spacing:-.02em}
   gap:10px;color:var(--muted);font-size:13.5px;pointer-events:none;
 }
 .empty[hidden]{display:none}
+.empty .btn{pointer-events:auto;width:auto;margin-top:8px;padding:11px 18px}
 .empty .big{font-size:15px;font-weight:750;color:var(--ink);letter-spacing:-.03em}
 
 /* ---------- 플로팅 버튼 ---------- */
@@ -381,6 +382,7 @@ h1 .thin{font-weight:500;color:var(--muted);letter-spacing:-.02em}
     <div class="empty" id="empty" hidden>
       <span class="big">아직 아무것도 없어요</span>
       <span>첫 번째 홍보를 올려 보세요</span>
+      <button class="btn ghost small" id="emptyCta" type="button">첫 홍보 올리기</button>
     </div>
   </main>
 </div>
@@ -1169,6 +1171,7 @@ const CONFIG = {
   $('#segUrl').addEventListener('click', () => setUploadMode('url'));
 
   $('#fab').addEventListener('click', openUpload);
+  $('#emptyCta').addEventListener('click', openUpload);
   $('#upDesc').addEventListener('input', (e) => { $('#descCount').textContent = String(e.target.value.length); });
 
   $('#drop').addEventListener('keydown', (e) => {
