@@ -1551,7 +1551,8 @@ const CONFIG = {
     openItem: openDetail,
     boost: applyBoost,
     boostState: boostState,
-    render: render
+    render: render,
+    client: function () { return sb; }
   };
 
   boot();
