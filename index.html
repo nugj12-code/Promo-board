@@ -95,20 +95,19 @@ html[data-theme="dark"] .admin-badge:hover{background:#e9e9ee;border-color:#e9e9
 html[data-theme="dark"] .mode-badge{color:#9c9ca6}
 html[data-theme="dark"] .sheet{box-shadow:0 30px 90px -30px rgba(0,0,0,.9)}
 html[data-theme="dark"] .bubble{
-  box-shadow:0 1px 2px rgba(0,0,0,.5),0 18px 36px -26px rgba(0,0,0,.95);
+  box-shadow:0 1px 2px rgba(0,0,0,.5),0 12px 24px -18px rgba(0,0,0,.9);
 }
 html[data-theme="dark"] .bubble img{opacity:.99;filter:none}
 html[data-theme="dark"] .bubble::before{
-  background:
-    radial-gradient(closest-side,rgba(255,255,255,0) calc(100% - 15px),rgba(255,255,255,.06) calc(100% - 8px),rgba(255,255,255,.16) 100%);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),inset 0 2px 3px rgba(255,255,255,.12),inset 0 -8px 16px rgba(0,0,0,.18);
+  background:radial-gradient(closest-side,rgba(255,255,255,0) calc(100% - 11px),rgba(255,255,255,.05) calc(100% - 6px),rgba(255,255,255,.13) 100%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
 }
 html[data-theme="dark"] .bubble::after{
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 0 1px 6px rgba(255,255,255,.08);
-  background:radial-gradient(11% 8% at 72% 80%,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 72%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);
 }
+html[data-theme="dark"] .bubble.touch::after{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.30)}
 html[data-theme="dark"] .bubble:hover,
-html[data-theme="dark"] .bubble:focus-visible{box-shadow:0 2px 10px rgba(0,0,0,.55),0 26px 54px -28px rgba(0,0,0,1)}
+html[data-theme="dark"] .bubble:focus-visible{box-shadow:0 2px 10px rgba(0,0,0,.55),0 16px 32px -20px rgba(0,0,0,1)}
 html[data-theme="dark"] .bubble:hover img,
 html[data-theme="dark"] .bubble:focus-visible img{opacity:1;filter:none}
 html[data-theme="dark"] .bubble.top{box-shadow:0 0 0 1.5px rgba(242,242,245,.5),0 2px 8px rgba(0,0,0,.5),0 22px 50px -26px rgba(0,0,0,.95)}
@@ -219,7 +218,7 @@ button{font-family:inherit}
   position:absolute;top:0;left:0;padding:0;margin:0;display:block;opacity:0;
   border:0;border-radius:50%;background:transparent;
   overflow:hidden;cursor:pointer;appearance:none;isolation:isolate;
-  box-shadow:0 1px 2px rgba(10,10,12,.03),0 16px 34px -26px rgba(10,10,12,.30);
+  box-shadow:0 1px 2px rgba(10,10,12,.04),0 10px 20px -18px rgba(10,10,12,.42);
   container-type:inline-size;
   will-change:transform;
   touch-action:manipulation;
@@ -236,27 +235,24 @@ button{font-family:inherit}
   transition:transform .5s var(--ease),opacity .24s var(--ease),filter .24s var(--ease);
   pointer-events:none;
 }
-/* 가장자리에만 스치는 유리 광택(가운데는 건드리지 않아 이미지가 또렷합니다)
-   — 띠 두께는 px 고정이라 거품이 커져도 사진을 덜 가립니다 */
+/* 가장자리에만 스치는 유리 광택 — 띠 두께는 px 고정이라 거품이 커져도 사진을 덜 가립니다 */
 .bubble::before{
   content:"";position:absolute;inset:0;border-radius:inherit;z-index:2;pointer-events:none;
-  background:
-    radial-gradient(closest-side,rgba(255,255,255,0) calc(100% - 15px),rgba(255,255,255,.16) calc(100% - 8px),rgba(255,255,255,.5) 100%);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.85),inset 0 2px 3px rgba(255,255,255,.55),inset 0 -6px 14px rgba(255,255,255,.12);
+  background:radial-gradient(closest-side,rgba(255,255,255,0) calc(100% - 11px),rgba(255,255,255,.14) calc(100% - 6px),rgba(255,255,255,.42) 100%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.8);
 }
-/* 얇은 바깥 테두리와 작은 반사광 */
+/* 얇은 바깥 테두리 */
 .bubble::after{
   content:"";position:absolute;inset:0;border-radius:inherit;z-index:3;pointer-events:none;
-  box-shadow:inset 0 0 0 1px rgba(120,132,148,.20),inset 0 1px 5px rgba(255,255,255,.55);
-  background:radial-gradient(11% 8% at 72% 80%,rgba(255,255,255,.8) 0%,rgba(255,255,255,0) 72%);
+  box-shadow:inset 0 0 0 1px rgba(120,132,148,.20);
   transition:box-shadow .18s var(--ease);
 }
 /* 다른 거품과 맞닿는 순간 — 테두리 광택이 살짝 밝아집니다 */
 .bubble.touch::after{
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.96),inset 0 0 12px rgba(255,255,255,.42);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.95);
 }
 .bubble:hover,.bubble:focus-visible{
-  box-shadow:0 2px 8px rgba(10,10,12,.05),0 24px 52px -28px rgba(10,10,12,.42);
+  box-shadow:0 2px 6px rgba(10,10,12,.05),0 14px 28px -20px rgba(10,10,12,.45);
 }
 .bubble:hover img,.bubble:focus-visible img{transform:scale(1.03);opacity:1}
 /* 손가락으로 누르는 즉시 — 아주 작게 눌린 느낌 */
@@ -265,20 +261,19 @@ button{font-family:inherit}
 html[data-theme="dark"] .bubble.press::after{box-shadow:inset 0 0 0 2px rgba(242,242,245,.34),inset 0 0 0 1px rgba(255,255,255,.2)}
 .bubble:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .bubble.top{
-  box-shadow:0 0 0 1.5px rgba(11,11,12,.38),0 2px 8px rgba(10,10,12,.06),0 22px 50px -26px rgba(10,10,12,.45);
+  box-shadow:0 0 0 1.5px rgba(11,11,12,.3),0 10px 20px -18px rgba(10,10,12,.42);
 }
 .bubble.top:hover,.bubble.top:focus-visible{
-  box-shadow:0 0 0 1.5px rgba(11,11,12,.5),0 24px 54px -28px rgba(10,10,12,.45);
+  box-shadow:0 0 0 1.5px rgba(11,11,12,.42),0 14px 28px -20px rgba(10,10,12,.45);
 }
 .bubble .chip{
   position:absolute;left:50%;bottom:8%;transform:translateX(-50%);z-index:4;
   display:inline-flex;align-items:center;gap:.16em;
   font-size:clamp(8px,6.4cqw,20px);font-weight:750;line-height:1;
   letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:#111;
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(255,255,255,.6);border-radius:999px;
+  background:rgba(255,255,255,.9);
+  border:1px solid rgba(255,255,255,.62);border-radius:999px;
   padding:.3em .58em;white-space:nowrap;pointer-events:none;
-  -webkit-backdrop-filter:blur(10px) saturate(150%);backdrop-filter:blur(10px) saturate(150%);
   box-shadow:0 1px 2px rgba(10,10,12,.14);
 }
 .bubble .chip .fire{font-size:.9em;filter:grayscale(1) opacity(.6)}
